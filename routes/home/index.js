@@ -35,7 +35,7 @@ module.exports = {
 			config: {
 				auth: "simple-cookie-strategy",
 				handler: async(request, h) => {
-					var odgovor = null;
+					var odgovor;
 					await new Promise((resolve, reject) => User.findOne({"email": request.auth.credentials.user}, function(err, user){
 						var user_status = new UserStatus({"user_email": request.auth.credentials.user,
 							"user_status": request.payload.user_status,

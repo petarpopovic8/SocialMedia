@@ -1,0 +1,32 @@
+<div class="navbar-fixed">
+	<ul id="dropdown1" class="dropdown-content">
+		<li><a href="/user_profile">Profile</a></li>
+		<li><a href="#!">Settings</a></li>
+		<li><a href="" id="log_out_user">Log out</a></li>
+	</ul>
+	<nav>
+		<div class="nav-wrapper">
+			<a href="#!" class="brand-logo"><i class="material-icons">favorite_border</i></a>
+			<ul class="right hide-on-med-and-down">
+				<li><a class="dropdown-trigger" href="#!" data-target="dropdown1"><%=name%><i class="material-icons right">arrow_drop_down</i></a></li>
+			</ul>
+		</div>
+	</nav>
+</div>
+
+<script>
+		$(".dropdown-trigger").dropdown();
+	
+		$("#log_out_user").on("click", function(){
+			$.ajax({
+				url: "/logout",
+				method: "POST",
+				success: function(){
+					location.href = "http://localhost:3000";
+				},
+				error: function(){
+
+				}
+			});
+		})
+</script>

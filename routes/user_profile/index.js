@@ -18,7 +18,7 @@ module.exports = {
 				handler: async (request, h) => {
 					var odgovor = null;
 					await User.findOne({"email": request.auth.credentials.user}, function(err, user){
-						odgovor = h.view('user_profile', {user: user});
+						odgovor = h.view('user_profile', {name: request.auth.credentials.name, user: user});
 					})
 					return odgovor;
 				}

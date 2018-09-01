@@ -21,7 +21,7 @@
 			<form class="col s12">
 				<div class="row">
 					<div class="col s3"></div>
-					<div class="col s6">
+					<div class="col s9">
 						<div class="card">
 							<div class="card-content">
 								<div class="row">
@@ -38,17 +38,20 @@
 							</div>
 						</div>
 					</div>
-					<div class="col s3"></div>
 				</div>
 			</form>
 		</div>
 		<div class="row">
 			<div class="col s3"></div>		
-			<div class="col s6">
+			<div class="col s9" id="user_statuses">
 				<%user_statuses.forEach(function(user_status) {%>
 				<div class="card horizontal">
-					<div class="card-image">
+					<div class="card-image">	
+						<% if (user_status.profile_pic) {%>
+						<i class="material-icons" style="margin: 30; color: #ee6e73; font-size: 7rem; display: block;">face</i>
+						<%} else {%>
 						<img src="http://localhost:3000/user_profile_images/<%=user_status.profile_pic%>">
+						<%}%>
 					</div>
 					<div class="card-stacked">
 						<div class="card-content">
@@ -56,14 +59,18 @@
 							<%=user_status.user_status%>
 						</div>
 						<div class="card-action">
-							<a href="#">Comment</a>
+							<form class="col s12">
+								<div class="input-field col s12">
+									<i class="material-icons prefix">mode_edit</i>
+									<textarea id="icon_prefix3" class="materialize-textarea"></textarea>
+									<label for="icon_prefix3">Comment</label>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>	
 				<%})%>
 			</div>
-		
-			<div class="col s3"></div>
 		</div>
 		<div class="row"></div>
 		<%include partials/footer%>
@@ -81,7 +88,21 @@
 				contentType: "application/json",
 				data: JSON.stringify({"user_status": status_val}),
 				success: function(saved_status){
-					$(".user_statuses").append("<li class='clearfix'><img src='http://localhost:3000/user_profile_images/" + saved_status.profile_pic + "'><div class='poster_name'>" + saved_status.name + "</div><p>" + status_val + "</p></li>");
+					var profile_pic = `<i class="material-icons" style="margin: 30; color: #ee6e73; font-size: 7rem; display: block;">face</i>`;
+					$("#user_statuses").prepend(`<div class="card horizontal"><div class="card-image">	
+						${profile_pic}
+						</div>
+						<div class="card-stacked">
+						<div class="card-content">
+						<span class="card-title">${saved_status.name} @${saved_status.status_date.toLocaleString()}</span>
+						${saved_status.user_status}
+						</div>
+						<div class="card-action">
+						<a href="#">Comment</a>
+						</div>
+						</div>
+						</div>`);
+
 				},
 				err: function(){
 

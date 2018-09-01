@@ -17,7 +17,24 @@ server.route({
 	handler: function(request, h){
 		return h.view('landing')
 	}
+});
+
+server.route({
+	method: "GET",
+	path: "/sign-up",
+	handler: function(request, h){
+		return h.view('signup')
+	}
 })
+
+server.route({
+	method: "GET",
+	path: "/sign-in",
+	handler: function(request, h){
+		return h.view('signin')
+	}
+})
+
 
 server.register({
 	plugin: require('vision')

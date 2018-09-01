@@ -12,8 +12,8 @@ module.exports = {
 			path: "/sign_up",
 			handler: async (request, h) => {
 				var odgovor = null;
-				console.log(request.payload.email);
-				await new Promise((resolve, reject) => User.findOne({"email": request.payload.email}, function(err, existing_user){
+				console.log(request.payload.interests);
+				await User.findOne({"email": request.payload.email}, function(err, existing_user){
 					if(existing_user){
 						console.log("već postoji");
 						odgovor = Boom.badRequest('Email adresa već je registrirana');	
@@ -23,19 +23,18 @@ module.exports = {
 
 						var user = new User({"email": request.payload.email,
 						"name": request.payload.name,
-						"password": request.payload.password, "user_profile": {}});
+						"password": request.payload.password, "user_profile": {
+							"bio": request.payload.bio, "interests": request.payload.interests, "profile_pic": request.payload.profile_pic
+						}});
 
 						user.save(function(err, save_user_record){
-							if(err){
+							if(err)
 							 	return Boom.badRequest('Ups! Nastao je error pri registraciji!');
-							 	resolve();
-							} else{
-								return {message: "Uspjeh!"}
-								resolve();	
-							  }				
+							else
+								return {message: "Uspjeh!"}						
 						})
 				  	}
-				}));
+				})
 				return odgovor;				
 			}			
 		}, 
@@ -44,17 +43,15 @@ module.exports = {
 			path: "/login",
 			handler: async(request,h) => {
 				var odgovor = null;
-				console.log("request_payload", request.payload);
-				await new Promise((resolve, reject) => User.findOne({"email": request.payload.email, "password": request.payload.password}, function(err, valid_user){
+				console.log(request.payload);
+				await User.findOne({"email": request.payload.email, "password": request.payload.password}, function(err, valid_user){
 					if(valid_user){
 						request.cookieAuth.set({"user": valid_user.email, "member_id": valid_user.member_id, "name": valid_user.name});
-						resolve();
 						
 					} else {
 						odgovor = Boom.badRequest('Krivi username ili šifra');
-						resolve();
 					}
-				}));
+				})
 				return odgovor;
 			}
 		},

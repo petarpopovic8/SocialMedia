@@ -1,57 +1,75 @@
 <html>
-	<%include partials/header%>
-	<body class="landing_body">
-		<h1 id="landing_header">Dobrodošli!</h1>
-		<div id ="sign_up_div">	
-			<form id="sign_up_form">
-				<h2>Registracija&nbsp</h2>
-				<input type ="text" id="name" name="name" placeholder="Ime">
-				<input type ="text" id="email" name="email" placeholder="Email adresa">
-				<input type ="password" id="password" name="password" placeholder="Šifra">
-				<input id="register_user" type="button" value="Register">
-			</form>
+<%include partials/header%>
+
+<body>
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo"><i class="material-icons">favorite_border</i></a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="/sign-in">Sign in</a></li>
+        </ul>
+      </div>
+    </nav>
+        
+	<div class="parallax-container">
+		<div class="parallax"><img src="images/2000.jpg"></div>
+	</div>
+	<div class="section white">
+		<div class="row container">
+			<h2 class="header">Sky is the limit</h2>
+			<p class="grey-text text-darken-3 lighten-3">With <span style="color:#e57373; font-weight: bold">Spang</span> you can customize your experience just the way you like it! We make effort to provide our users stable, secure and easy-to-use social networking.</p>
 		</div>
-		<div id ="sign_in_div">	
-			<form id="sign_in_form">
-				<h2>Prijava&nbsp</h2>
-				<input type ="text" id="usr_email" name="email" placeholder="Email adresa">
-				<input type ="password" id="usr_pwd" name="password" placeholder="Šifra">
-				<input id="sign_in_user" type="button" value="Sign In">
-			</form>
+	</div>
+	<div class="parallax-container">
+		<div class="parallax"><img src="images/landing2.jpg"></div>
+	</div>
+	<div class="section white">
+		<div class="row container">
+			<h2 class="header">Feel free to post anything!</h2>
+			<p class="grey-text text-darken-3 lighten-3"><span style="color:#e57373; font-weight: bold">Spang</span> doesn't control content you post limiting your creative freedom! Instead, we make sure content our users make is fully protected by copyright laws.</p>
 		</div>
+	</div>
+	<div class="parallax-container">
+		<div class="parallax"><img src="images/landing1.jpg"></div>
+	</div>
+	<div class="section white">
+		<div class="row container">
+			<div class="row">
+				<h2 class="header"><span style="color:#e57373">Connect</span> to others</h2>
+				<p class="grey-text text-darken-3 lighten-3">Post photos, comments, statuses and much more! Connect to your community and let them see the <span style="color:#e57373; font-weight: bold">real you.</span></p>
+			</div>
+			<div class="row">
+				<div class="col s4">
+					<div class="center promo promo-example">
+						<i class="material-icons" style="margin: 40px 0; color: #ee6e73; font-size: 7rem; display: block;">group</i>
+						<p class="promo-caption">Meet people</p>
+						<p class="light center">We made the safe community for you to find <span style="color:#e57373">people similar to you.</span></p>
+					</div>
+				</div>
+				<div class="col s4">
+					<div class="center promo promo-example">
+						<i class="material-icons" style="margin: 40px 0; color: #ee6e73; font-size: 7rem; display: block;">favorite</i>
+						<p class="promo-caption">User Experience Focused</p>
+						<p class="light center">By utilizing elements and principles of Material Design, we were able to create a social network that focuses on User Experience making it easy to use and less time consuming.</p>
+					</div>
+				</div>
+				<div class="col s4">
+					<div class="center promo promo-example">
+						<i class="material-icons" style="margin: 40px 0; color: #ee6e73; font-size: 7rem; display: block;">attach_money</i>
+						<p class="promo-caption">Free</p>
+						<p class="light center"><span style="color:#e57373">Spang</span> is developed fully out of inspiration. We want to inspire YOU to make some great content, so our community will always remain free to use.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-	</body>
-	<script>
-		$("#register_user").on("click", function(){
-			$.ajax({
-				method: "POST",
-				url: "/sign_up",
-				data: $("#sign_up_form").serialize(),
-				success: function(data){
-					location.href = "http://localhost:3000/home";
-					console.log("Uspješna registracija!");
-				},
-				error: function(){
-					console.log("nije proslo!");
-				}
+	<%include partials/footer%>
+</body>
 
-			})
-		});
-
-		$("#sign_in_user").on("click", function(){
-			$.ajax({
-				url: "/login",
-				method: "POST",
-				data: $("#sign_in_form").serialize(),
-				success: function(data){
-					console.log("Uspješna prijava!");
-					location.href = "http://localhost:3000/home";
-				},
-				error: function(){
-					console.log("nije proslo!");
-					$("#usr_email, #usr_pwd").val('');
-				}
-			})
-		})
-	</script>
+<script>
+	$(document).ready(function(){
+		$('.parallax').parallax();
+	});
+</script>
 </html>

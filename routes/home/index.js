@@ -13,17 +13,21 @@ module.exports = {
 			config: {
 				auth: "simple-cookie-strategy",
 				handler: async (request, h) => {
-					var odgovor = null;
-					var name = request.auth.credentials.name;;
+					var odgovor
+					var name = request.auth.credentials.name;
 					var user_statuses;
 					await UserStatus.find({}, function(err, statuses){
-						odgovor = h.view('home', {name: name, user_statuses: statuses});
+						user_statuses = statuses;
 						console.log("user_statuses", user_statuses);
 					})
 					console.log("pozz: ", name);	
-					return odgovor;
+					user_statuses.sort(function(a, b) {
+						return b.status_date - a.status_date;
+					});
+					return h.view('home', {name: name, user_statuses: user_statuses});
 				}
-			}		
+			}
+			
 		},
 		{
 			method: "POST",
@@ -50,11 +54,13 @@ module.exports = {
 					}));
 					return odgovor;
 				}
+				
 			}
 		}
 		]);
 	}
 }	
+
 
 module.exports.register.attributes = {
 	pkg: require("./package.json")

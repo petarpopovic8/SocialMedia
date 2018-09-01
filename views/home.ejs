@@ -1,31 +1,86 @@
 <%include partials/header%>
 <html>
-	<body>
-		<%include partials/logout%>
-			<h1>Home</h1>
-			<h2>Pozdrav, <%=name%></h2>
-			<h2 id="community_header">Spang Status</h2>
-			<img src="/images/Capture.svg" style="color:#FF0000">
-			<div id="community_statuses_div">
-				<ol class="user_statuses">
-					<%user_statuses.forEach(function(user_status) {%>
-						<li class = "clearfix">
-							<img src="http://localhost:3000/user_profile_images/<%=user_status.profile_pic%>">
-							<div class="poster_name">
-								<%=user_status.name%>
+<body>
+	<div class="navbar-fixed">
+		<ul id="dropdown1" class="dropdown-content">
+			<li><a href="#!">Profile</a></li>
+			<li><a href="#!">Settings</a></li>
+			<li><a href="" id="log_out_user">Log out</a></li>
+		</ul>
+		<nav>
+			<div class="nav-wrapper">
+				<a href="#!" class="brand-logo"><i class="material-icons">favorite_border</i></a>
+				<ul class="right hide-on-med-and-down">
+					<li><a class="dropdown-trigger" href="#!" data-target="dropdown1"><%=name%><i class="material-icons right">arrow_drop_down</i></a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+	<div>
+		<div class="row">
+			<form class="col s12">
+				<div class="row">
+					<div class="col s3"></div>
+					<div class="col s9">
+						<div class="card">
+							<div class="card-content">
+								<div class="row">
+									<span class="card-title">What's on your mind?</span>
+								</div>
+								<div class="input-field">
+									<i class="material-icons prefix">announcement</i>
+									<textarea id="icon_prefix2" class="materialize-textarea"></textarea>
+									<label for="icon_prefix2">Write status</label>
+								</div>
 							</div>
-							<p><%=user_status.user_status%></p>	
-						</li>
-					<%})%>
-				</ol>
-				<textarea id="statuses_textarea" rows="4" cols="50">
-				</textarea></br>
-				<button id="submit_status_button" type="submit">POST</button>
+							<div class="card-action">
+								<a class="waves-effect waves-light btn" id="submit_status_button"><i class="material-icons right">send</i>POST</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="row">
+			<div class="col s3"></div>		
+			<div class="col s9" id="user_statuses">
+				<%user_statuses.forEach(function(user_status) {%>
+				<div class="card horizontal">
+					<div class="card-image">	
+						<% if (user_status.profile_pic) {%>
+						<i class="material-icons" style="margin: 30; color: #ee6e73; font-size: 7rem; display: block;">face</i>
+						<%} else {%>
+						<img src="http://localhost:3000/user_profile_images/<%=user_status.profile_pic%>">
+						<%}%>
+					</div>
+					<div class="card-stacked">
+						<div class="card-content">
+							<span class="card-title"><%=user_status.name%> @ <%=user_status.status_date.toLocaleString()%></span>
+							<%=user_status.user_status%>
+						</div>
+						<div class="card-action">
+							<form class="col s12">
+								<div class="input-field col s12">
+									<i class="material-icons prefix">mode_edit</i>
+									<textarea id="icon_prefix3" class="materialize-textarea"></textarea>
+									<label for="icon_prefix3">Comment</label>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>	
+				<%})%>
+			</div>
+		</div>
+		<div class="row"></div>
+		<%include partials/footer%>
 	</body>
 	<script>
+		$(".dropdown-trigger").dropdown();
+
 		$("#submit_status_button").on("click", function(){
-			var status_val = $("#statuses_textarea").val();
-			$("#statuses_textarea").val("");
+			var status_val = $("#icon_prefix2").val();
+			$("#icon_prefix2").val("");
 
 			$.ajax({
 				url: "/user_status/create",
@@ -33,12 +88,39 @@
 				contentType: "application/json",
 				data: JSON.stringify({"user_status": status_val}),
 				success: function(saved_status){
-					$(".user_statuses").append("<li class='clearfix'><img src='http://localhost:3000/user_profile_images/" + saved_status.profile_pic + "'><div class='poster_name'>" + saved_status.name + "</div><p>" + status_val + "</p></li>");
+					var profile_pic = `<i class="material-icons" style="margin: 30; color: #ee6e73; font-size: 7rem; display: block;">face</i>`;
+					$("#user_statuses").prepend(`<div class="card horizontal"><div class="card-image">	
+						${profile_pic}
+						</div>
+						<div class="card-stacked">
+						<div class="card-content">
+						<span class="card-title">${saved_status.name} @${saved_status.status_date.toLocaleString()}</span>
+						${saved_status.user_status}
+						</div>
+						<div class="card-action">
+						<a href="#">Comment</a>
+						</div>
+						</div>
+						</div>`);
+
 				},
 				err: function(){
 
 				}
 			})
+		});
+
+		$("#log_out_user").on("click", function(){
+			$.ajax({
+				url: "/logout",
+				method: "POST",
+				success: function(){
+					location.href = "http://localhost:3000";
+				},
+				error: function(){
+
+				}
+			});
 		})
 	</script>
-</html>
+	</html>

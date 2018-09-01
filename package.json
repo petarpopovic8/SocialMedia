@@ -9,8 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "boom": "^7.2.0",
     "ejs": "^2.6.1",
     "hapi": "^17.5.4",
+    "hapi-auth-cookie": "^9.0.0",
     "inert": "^5.1.0",
     "mongoose": "^5.2.10",
     "shortid": "^2.2.13",

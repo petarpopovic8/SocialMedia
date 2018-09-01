@@ -27,11 +27,31 @@
 				method: "POST",
 				url: "/sign_up",
 				data: $("#sign_up_form").serialize(),
-				success: function(){
-					console.log("success!");
+				success: function(data){
+					location.href = "http://localhost:3000/home";
+					console.log("Uspješna registracija!");
+				},
+				error: function(){
+					console.log("nije proslo!");
 				}
 
 			})
 		});
+
+		$("#sign_in_user").on("click", function(){
+			$.ajax({
+				url: "/login",
+				method: "POST",
+				data: $("#sign_in_form").serialize(),
+				success: function(data){
+					console.log("Uspješna prijava!");
+					location.href = "http://localhost:3000/home";
+				},
+				error: function(){
+					console.log("nije proslo!");
+					$("#usr_email, #usr_pwd").val('');
+				}
+			})
+		})
 	</script>
 </html>

@@ -6,6 +6,8 @@ const server = new Hapi.Server({
 const mongoose = require("mongoose");
 const User = require("./database_models/user_model");
 const node_connect_db = mongoose.connect("mongodb://localhost/node_connect");
+const Boom = require("Boom");
+const sync = require("sync");
 
 server.start(console.log("test"));
 
@@ -32,6 +34,18 @@ server.register({
 	plugin: require('inert')
 });
 
+server.register(require('hapi-auth-cookie'));
+server.auth.strategy("simple-cookie-strategy", "cookie",{
+	cookie: "node_connect_cookie",
+	password: "abcdefgjaksčodfkapsldkfajowpispa",
+	isSecure: false
+})
+
+server.register({	
+	plugin: require('./routes/home')
+})
+
+
 server.route({
 	method: "GET",
 	path: "/{param*}",
@@ -42,17 +56,21 @@ server.route({
 	}
 });
 
+server.route({
+	method: "GET",
+	path: "/user_profile_images/{param*}",
+	handler: {
+		directory: {
+			path: "user_profile_images"
+		}
+	}
+});
+
+server.register({
+	plugin: require("./routes/user")
+})
+ 
+
 const start = async() => {
 	await server.register(require("./routes/user"));
 }
-
-
-/*server.register({
-	register: require("./routes/user")
-}).then(() => {server.views({
-		function(err){
-			if(err)
-				return;
-		}
-	});
-}); */

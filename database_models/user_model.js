@@ -5,7 +5,7 @@ const shortid = require("shortid");
 var userProfileSchema = mongoose.Schema({
 	location: {type: String, default: "None"},
 	bio: {type: String, default: "None"},
-	interests: {type: String, default: "None"},
+	interests: [{type: String}],
 	profile_pic: {type: String, default: "default_profile.png"}
 })
 

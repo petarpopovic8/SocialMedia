@@ -21,6 +21,9 @@ module.exports = {
 						console.log("user_statuses", user_statuses);
 					})
 					console.log("pozz: ", name);	
+					user_statuses.sort(function(a, b) {
+						return b.status_date - a.status_date;
+					});
 					return h.view('home', {name: name, user_statuses: user_statuses});
 				}
 			}

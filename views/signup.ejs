@@ -1,0 +1,165 @@
+<html>
+<%include partials/header%>
+
+<body>
+	<div>
+		<div id="step-one" class="card" style="width: 60%; margin-top: 6%; margin-bottom: 5%; margin-left: 20%">
+			<div class="card-content">
+				<span class="card-title center-align" style="margin-bottom: 10%">Create your account</span>
+				<div style="margin-top: 10%; margin-bottom: 10%; margin-left: 46%; display: none" id="loader">
+					<div class="preloader-wrapper big active">
+						<div class="spinner-layer spinner-spang-only">
+							<div class="circle-clipper left">
+								<div class="circle"></div>
+							</div><div class="gap-patch">
+								<div class="circle"></div>
+							</div><div class="circle-clipper right">
+								<div class="circle"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<ul class="collapsible popout" id="register-info" style="display: block">
+					<li>
+						<div class="collapsible-header"><i class="material-icons">info_outline</i>Required</div>
+						<div class="collapsible-body">
+							<form class="col s8 center-align">
+								<div class="row" style="margin: 5%;">
+									<div class="input-field col s6">
+										<input id="first_name" type="text" class="validate">
+										<label for="first_name">First Name</label>
+									</div>
+									<div class="input-field col s6">
+										<input id="last_name" type="text" class="validate">
+										<label for="last_name">Last Name</label>
+									</div>
+									<div class="input-field col s12">
+										<input id="email" type="email" class="validate">
+										<label for="email">Email</label>
+									</div>
+									<div class="input-field col s12">
+										<input id="password" type="password" class="validate">
+										<label for="password">Password</label>
+									</div>
+								</div>
+							</form>
+						</div>
+					</li>
+					<li>
+						<div class="collapsible-header"><i class="material-icons">whatshot</i>Choose avatar</div>
+						<div class="collapsible-body">
+							<form class="col s8 center-align">
+								<div class="row" style="margin: 5%; margin-top:5%">
+									<div class="row center-align"> 
+										<div class="file-field input-field">
+											<div class="material-icons">
+												<i class="material-icons" style="margin: 40px 0; color: #ee6e73; font-size: 7rem; display: block;">face</i>
+												<input type="file" id="avatar">
+											</div>
+											<div class="file-path-wrapper">
+												<input class="file-path validate" type="text" placeholder="avatar file">
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</li>
+					<li>
+						<div class="collapsible-header"><i class="material-icons">favorite_border</i>Tell us more about yourself</div>
+						<div class="collapsible-body">
+							<form class="col s8 center-align">
+								<div class="row" style="margin: 15%; margin-top:5%">					
+									<div class="row center-align"> 
+										<div class="input-field col s12">
+											<i class="material-icons prefix">mode_edit</i>
+											<textarea id="icon_prefix2" class="materialize-textarea"></textarea>
+											<label for="icon_prefix2">BIO</label>
+										</div>
+									</div>
+									<div class="row center-align"> 
+										<div class="chips chips-placeholder" id="hobbies"></div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</li>
+				</ul>
+				<div class="row center-align">
+					<a class="waves-effect waves-light btn" onclick="sign_in_user()">sign up</a>
+				</div>
+				<div class="row center-align">
+					<span>Already have account? <a href="/sign-in"><span style="color:#e57373; font-weight: bold">Sign in.</span></a>
+				</div>
+				<div class="row center-align"></div>			
+			</div>
+		</div>
+		<%include partials/footer%>	
+	</div>		
+
+</body>
+<script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
+<script>
+
+
+
+	function sign_in_user(){
+
+		var loader = document.getElementById("loader");
+		var registerinfo = document.getElementById("register-info");
+
+		loader.style.display = "block";
+		registerinfo.style.display = "none";
+
+		var first_name = $('#first_name').val();
+		var last_name = $('#last_name').val();
+		var email = $('#email').val();
+		var password = $('#password').val();
+		var avatar = $('#avatar').val();
+		var bio = $('#icon_prefix2').val();
+
+		console.log(first_name);
+		console.log(last_name);
+		console.log(email);
+		console.log(password);
+		console.log(avatar);
+		console.log(bio);
+		console.log(M.Chips.getInstance($('.chips')).chipsData.map(x => x.tag));
+
+		$.ajax({
+			method: "POST",
+			url: "/sign_up",
+			data: {name: first_name + ' ' + last_name,
+			email: email, password: password,
+			profile_pic: avatar,
+			bio: bio,
+			interests: JSON.stringify(M.Chips.getInstance($('.chips')).chipsData.map(x => x.tag))
+		},
+		success: function(data){
+			location.href = "http://localhost:3000/home";
+			console.log("Uspješna registracija!");
+		},
+		error: function(){
+			console.log("nije proslo!");
+			loader.style.display="none";	
+			registerinfo.style.display="block";
+		}
+
+	});
+	}
+
+	$('.chips-placeholder').chips({
+		placeholder: 'Hobbies',
+		secondaryPlaceholder: 'add',
+	});
+
+	var chip = {
+		tag: 'chip content',
+	};
+
+	$(document).ready(function(){
+		$('.collapsible').collapsible();
+	});
+
+</script>
+</html>

@@ -26,12 +26,11 @@ module.exports = {
 						"password": request.payload.password, "user_profile": {
 							"bio": request.payload.bio, "interests": request.payload.interests, "profile_pic": request.payload.profile_pic
 						}});
+						request.cookieAuth.set({"user": user.email, "member_id": user.member_id, "name": user.name});
 
 						user.save(function(err, save_user_record){
 							if(err)
-							 	return Boom.badRequest('Ups! Nastao je error pri registraciji!');
-							else
-								request.cookieAuth.set({"user": user.email, "member_id": user.member_id, "name": user.name});				
+							 	return Boom.badRequest('Ups! Nastao je error pri registraciji!');			
 						})
 				  	 }
 				})

@@ -13,7 +13,7 @@ module.exports = {
 			handler: async (request, h) => {
 				var odgovor = null;
 				console.log(request.payload.email);
-				await User.findOne({"email": request.payload.email}, function(err, existing_user){
+				await new Promise((resolve, reject) => User.findOne({"email": request.payload.email}, function(err, existing_user){
 					if(existing_user){
 						console.log("već postoji");
 						odgovor = Boom.badRequest('Email adresa već je registrirana');	
@@ -26,13 +26,16 @@ module.exports = {
 						"password": request.payload.password, "user_profile": {}});
 
 						user.save(function(err, save_user_record){
-							if(err)
+							if(err){
 							 	return Boom.badRequest('Ups! Nastao je error pri registraciji!');
-							else
-								return {message: "Uspjeh!"}						
+							 	resolve();
+							} else{
+								return {message: "Uspjeh!"}
+								resolve();	
+							  }				
 						})
 				  	}
-				})
+				}));
 				return odgovor;				
 			}			
 		}, 
@@ -42,14 +45,16 @@ module.exports = {
 			handler: async(request,h) => {
 				var odgovor = null;
 				console.log("request_payload", request.payload);
-				await User.findOne({"email": request.payload.email, "password": request.payload.password}, function(err, valid_user){
+				await new Promise((resolve, reject) => User.findOne({"email": request.payload.email, "password": request.payload.password}, function(err, valid_user){
 					if(valid_user){
 						request.cookieAuth.set({"user": valid_user.email, "member_id": valid_user.member_id, "name": valid_user.name});
+						resolve();
 						
 					} else {
 						odgovor = Boom.badRequest('Krivi username ili šifra');
+						resolve();
 					}
-				})
+				}));
 				return odgovor;
 			}
 		},

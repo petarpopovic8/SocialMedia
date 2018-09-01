@@ -45,6 +45,10 @@ server.register({
 	plugin: require('./routes/home')
 })
 
+server.register({	
+	plugin: require('./routes/user_profile')
+})
+
 
 server.route({
 	method: "GET",

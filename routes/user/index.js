@@ -31,9 +31,9 @@ module.exports = {
 							if(err)
 							 	return Boom.badRequest('Ups! Nastao je error pri registraciji!');
 							else
-								return {message: "Uspjeh!"}						
+								request.cookieAuth.set({"user": user.email, "member_id": user.member_id, "name": user.name});				
 						})
-				  	}
+				  	 }
 				})
 				return odgovor;				
 			}			

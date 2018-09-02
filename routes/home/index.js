@@ -16,7 +16,7 @@ module.exports = {
 					var odgovor
 					var name = request.auth.credentials.name;
 					var user_statuses;
-					var friend_requests;
+					var friend_requests = [];
 					await UserStatus.find({}, function(err, statuses){
 						user_statuses = statuses;
 						console.log("user_statuses", user_statuses);
@@ -24,9 +24,14 @@ module.exports = {
 					user_statuses.sort(function(a, b) {
 						return b.status_date - a.status_date;
 					});
-					await User.findOne({"email": request.auth.credentials.user}, function(err, user){
-						friend_requests = user.friend_requests;
-					});	
+					await new Promise((resolve, reject) => User.findOne({"email": request.auth.credentials.user}, function(err, user){
+						user.friend_requests.forEach(x => friend_requests.push({member_id : x.member_id, friend_name: x.friend_name, profile_pic: x.profile_pic,
+						 isRead: x.isRead}));
+						user.friend_requests.forEach(x => x.isRead = true);
+						user.save(function(err, result){
+							resolve();
+						});
+					}));	
 					return h.view('home', {name: name, user_statuses: user_statuses, friend_requests: friend_requests});
 				}
 			}

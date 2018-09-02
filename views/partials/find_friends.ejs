@@ -1,0 +1,8 @@
+<%users.forEach(function(friend){%>
+<li class="collection-item avatar">
+	<i class="material-icons circle">face</i>
+	<span class="title"><%=friend.name%></span>
+	<p><%=friend.user_profile[0].location%></p>
+	<a href="#!" class="secondary-content"><i class="material-icons">person_add</i></a>
+</li>
+<%})%>	

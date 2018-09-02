@@ -35,6 +35,9 @@
 									<label for="password">Password</label>
 								</div>
 							</div>
+							<div class="row center-align" style="display: none" id="incorrect-credentials">
+								<span style="color:#e57373;">Incorrect email or password.</span>
+							</div>
 							<div class="row center-align">
 								<a class="waves-effect waves-light btn" onclick="sign_in_user()">sign in</a>
 							</div>
@@ -69,6 +72,7 @@
 			},
 			error: function(){
 				$("#usr_email, #usr_pwd").val('');
+				document.getElementById('incorrect-credentials').style.display="block";
 				loader.style.display="none";	
 				registerinfo.style.display="block";
 			}

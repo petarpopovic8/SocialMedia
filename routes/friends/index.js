@@ -51,21 +51,23 @@ module.exports = {
 			config: {
 				auth: "simple-cookie-strategy",
 				handler: async(request, h) => {
-					var odgovor = null;
-					await new Promise((resolve, reject) => User.find({"email": request.auth.credentials.user}, function(err, sending_user){
+					await new Promise((resolve, reject) => User.find({"email": request.auth.credentials.user}, function(err, user){
 						if(err) reject();
-						User.find({"member_id" : request.payload.friend_member_id}, function(err, added_user){
-							added_user[0].update({$push: {"friend_requests": {"member_id": sending_user[0].member_id, 
-							"friend_name": sending_user[0].name, "profile_pic": sending_user[0].user_profile[0].profile_pic, "isRead": false}}}, function(err){
+						User.find({"member_id" : request.payload.member_id}, function(err, accepted_user){
 
-							})
-							console.log(added_user);
-							if(err)
-								odgovor = err;
+							user[0].update({$push: {"friends": {"member_id": accepted_user[0].member_id, 
+							"friend_name": accepted_user[0].name, "profile_pic": accepted_user[0].user_profile[0].profile_pic}}, 
+							$pull: {"friend_requests": {"member_id": accepted_user[0].member_id}}}, function(err){
+																									});
+
+							accepted_user[0].update({$push: {"friends": {"member_id": user[0].member_id, 
+							"friend_name": user[0].name, "profile_pic": user[0].user_profile[0].profile_pic}}}, function(err){
+																												});
+
 						})
 						resolve();
 					}));
-					return odgovor;
+					return null;
 				}
 			}
 		}

@@ -144,13 +144,13 @@
 			$.ajax({
 				method: "POST",
 				url: "/accept_friend_request",
-				contentType: "json",
+				contentType: "application/json",
 				data: JSON.stringify({"member_id": friend_member_id}),
 				success: function(){
-					
+
 				}
 			})
-		})
+		});
 
 	</script>
 	</html>

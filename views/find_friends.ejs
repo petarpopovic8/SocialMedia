@@ -11,4 +11,18 @@
 			</div>
 		<%})%>
 	</body>
+	<script>
+		$(".request_button").on("click", function(){
+			var clicked_button = $(this);
+			$.ajax({
+				method: "POST",
+				url: "/friend_request",
+				contentType: "application/json",
+				data: JSON.stringify({"friend_member_id": clicked_button.attr("id")}),
+				success: function(){
+					clicked_button.closest().remove()
+				}
+			})
+		})
+	</script>
 </html>

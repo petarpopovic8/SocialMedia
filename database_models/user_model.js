@@ -16,7 +16,7 @@ var userSchema = mongoose.Schema({
 	password: {type: String},
 	member_id: {type: String, default: shortid.generate},
 	friends: [{"member_id": String, "friend_name": String, "profile_pic": String}],
-	friend_requests: [{"member_id": String, "friend_name": String, "profile_pic": String}],
+	friend_requests: [{"member_id": String, "friend_name": String, "profile_pic": String, "isRead": Boolean}],
 	user_profile: [userProfileSchema]
 })
 

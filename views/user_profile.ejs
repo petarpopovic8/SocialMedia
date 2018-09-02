@@ -71,6 +71,21 @@
 				<button id="cancel_edit_profile" type ="button">Cancel</button>
 			</form>
 		</div>
+		<div>
+			<h2>Friend Requests</h2>
+			<ul>
+				<%user.friend_requests.forEach(function(request){%>
+					<li>
+						<div id="<%=request.member_id%>">
+							<img src="http://localhost:3000/user_profile_images/<%=request.profile_pic%>">
+							<%=request.friend_name%>
+							<button id="accept_friend_request" type="submit">Accept</button>
+							<button id="decline_friend_request" type="submit">Decline</button>
+						</div>
+					</li>
+				<%})%>
+			</ul>
+		</div>
 	</body>
 	<script>
 		$("#save_profile_button").on("click", function(){

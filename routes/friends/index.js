@@ -65,15 +65,13 @@ module.exports = {
 							"friend_name": user[0].name, "profile_pic": user[0].user_profile[0].profile_pic,
 							"location": user[0].location}}}, function(err){
 															 });
-							});
-
-						})
+							})
 						resolve();
-					}));
+					}))
 					return null;
-				}
+				}		
 			}
-		}
+		}	
 		])
 	}
 }

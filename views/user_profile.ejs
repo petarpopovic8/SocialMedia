@@ -35,10 +35,13 @@
 					<div class="col s12">
 						<ul class="tabs">
 							<li class="tab col s4"><a href="#test1">Timeline</a></li>
-							<li class="tab col s4"><a class="active" href="#test2">Photos</a></li>
-							<li class="tab col s4"><a href="#test4">Friends</a></li>
+							<li class="tab col s4"><a href="#test2">Photos</a></li>
+							<li class="tab col s4"><a class="active" href="#test4">Friends</a></li>
 						</ul>
 					</div>
+				</div>
+				<div class="row">
+					<%include partials/friends%>
 				</div>
 			</div>
 		</div>
@@ -75,14 +78,14 @@
 			<h2>Friend Requests</h2>
 			<ul>
 				<%user.friend_requests.forEach(function(request){%>
-					<li>
-						<div id="<%=request.member_id%>">
-							<img src="http://localhost:3000/user_profile_images/<%=request.profile_pic%>">
-							<%=request.friend_name%>
-							<button id="accept_friend_request" type="submit">Accept</button>
-							<button id="decline_friend_request" type="submit">Decline</button>
-						</div>
-					</li>
+				<li>
+					<div id="<%=request.member_id%>">
+						<img src="http://localhost:3000/user_profile_images/<%=request.profile_pic%>">
+						<%=request.friend_name%>
+						<button id="accept_friend_request" type="submit">Accept</button>
+						<button id="decline_friend_request" type="submit">Decline</button>
+					</div>
+				</li>
 				<%})%>
 			</ul>
 		</div>

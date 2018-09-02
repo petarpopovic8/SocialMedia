@@ -5,170 +5,196 @@
 	<div class="container">
 		<div class="section">
 			<div class="row">
-				<form class="col s12">
-					<div class="row">
-						<div class="col s12">
-							<div class="card">
-								<div class="card-content">
-									<div class="row">
-										<span class="card-title">What's on your mind?</span>
-									</div>
-									<div class="input-field">
-										<i class="material-icons prefix">announcement</i>
-										<textarea id="icon_prefix2" class="materialize-textarea"></textarea>
-										<label for="icon_prefix2">Write status</label>
-									</div>
-								</div>
-								<div class="card-action">
-									<a class="waves-effect waves-light btn" id="submit_status_button"><i class="material-icons right">send</i>POST</a>
-								</div>
-							</div>
+				<div class="col s6">
+					<ul class="collapsible">
+						<li>
+							<div class="collapsible-header">
+								<i class="material-icons">filter_drama</i>
+								Friend requests
+								<span class="new badge">4</span></div>
+								<div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+							</li>
+							<li>
+								<div class="collapsible-header">
+									<i class="material-icons">place</i>
+									Notifications
+									<span class="badge">1</span></div>
+									<div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+								</li>
+							</ul>
+						</div>
+						<div class="col s6">
 						</div>
 					</div>
-				</form>
-			</div>
-		</div>
-		<div class="section">
-			<div class="row">
-				<div class="col s4" >
-					<ul class="collection" id="find-friends">
-						<li>
-							<div class="col s4 offset-s4 center-align" style="margin-top: 10%; margin-bottom: 10%">
-								<div class="preloader-wrapper big active">
-									<div class="spinner-layer spinner-spang-only">
-										<div class="circle-clipper left">
-											<div class="circle"></div>
-										</div><div class="gap-patch">
-											<div class="circle"></div>
-										</div><div class="circle-clipper right">
-											<div class="circle"></div>
+					<div class="row">
+						<form class="col s12">
+							<div class="row">
+								<div class="col s12">
+									<div class="card">
+										<div class="card-content">
+											<div class="row">
+												<span class="card-title">What's on your mind?</span>
+											</div>
+											<div class="input-field">
+												<i class="material-icons prefix">announcement</i>
+												<textarea id="icon_prefix2" class="materialize-textarea"></textarea>
+												<label for="icon_prefix2">Write status</label>
+											</div>
+										</div>
+										<div class="card-action">
+											<a class="waves-effect waves-light btn" id="submit_status_button"><i class="material-icons right">send</i>POST</a>
 										</div>
 									</div>
 								</div>
 							</div>
-						</li>
-					</ul>
-				</div>		
-				<div class="col s8" id="user_statuses">
-					<%user_statuses.forEach(function(user_status) {%>
-					<div class="card horizontal">
-						<div class="card-image">	
-							<% if (!user_status.profile_pic) {%>
-							<i class="material-icons" style="margin: 30; color: #ee6e73; font-size: 7rem; display: block;">face</i>
-							<%} else {%>
-							<img src="http://localhost:3000/user_profile_images/<%=user_status.profile_pic%>">
-							<%}%>
-						</div>
-						<div class="card-stacked">
-							<div class="card-content">
-								<span class="card-title"><%=user_status.name%> @ <%=user_status.status_date.toLocaleString()%></span>
-								<%=user_status.user_status%>
-							</div>
-							<div class="card-action">
-								<form class="col s12">
-									<div class="input-field col s12">
-										<i class="material-icons prefix">mode_edit</i>
-										<textarea id="icon_prefix3" class="materialize-textarea"></textarea>
-										<label for="icon_prefix3">Comment</label>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>	
-					<%})%>
+						</form>
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="row"></div>
-		<%include partials/footer%>
-	</body>
-	<script>
-		$(".dropdown-trigger").dropdown();
-
-		$("#submit_status_button").on("click", function(){
-			var status_val = $("#icon_prefix2").val();
-			$("#icon_prefix2").val("");
-
-			$.ajax({
-				url: "/user_status/create",
-				method: "POST",
-				contentType: "application/json",
-				data: JSON.stringify({"user_status": status_val}),
-				success: function(saved_status){
-					var profile_pic = `<i class="material-icons" style="margin: 30; color: #ee6e73; font-size: 7rem; display: block;">face</i>`;
-					$("#user_statuses").prepend(`<div class="card horizontal"><div class="card-image">	
-						${profile_pic}
+				<div class="section">
+					<div class="row">
+						<div class="col s4" >
+							<ul class="collection" id="find-friends">
+								<li>
+									<div class="col s4 offset-s4 center-align" style="margin-top: 10%; margin-bottom: 10%">
+										<div class="preloader-wrapper big active">
+											<div class="spinner-layer spinner-spang-only">
+												<div class="circle-clipper left">
+													<div class="circle"></div>
+												</div><div class="gap-patch">
+													<div class="circle"></div>
+												</div><div class="circle-clipper right">
+													<div class="circle"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>		
+						<div class="col s8" id="user_statuses">
+							<%user_statuses.forEach(function(user_status) {%>
+							<div class="card horizontal">
+								<div class="card-image">	
+									<% if (!user_status.profile_pic) {%>
+									<i class="material-icons" style="margin: 30; color: #ee6e73; font-size: 7rem; display: block;">face</i>
+									<%} else {%>
+									<img src="http://localhost:3000/user_profile_images/<%=user_status.profile_pic%>">
+									<%}%>
+								</div>
+								<div class="card-stacked">
+									<div class="card-content">
+										<span class="card-title"><%=user_status.name%> @ <%=user_status.status_date.toLocaleString()%></span>
+										<%=user_status.user_status%>
+									</div>
+									<div class="card-action">
+										<form class="col s12">
+											<div class="input-field col s12">
+												<i class="material-icons prefix">mode_edit</i>
+												<textarea id="icon_prefix3" class="materialize-textarea"></textarea>
+												<label for="icon_prefix3">Comment</label>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>	
+							<%})%>
 						</div>
-						<div class="card-stacked">
-						<div class="card-content">
-						<span class="card-title">${saved_status.name} @${saved_status.status_date.toLocaleString()}</span>
-						${saved_status.user_status}
-						</div>
-						<div class="card-action">
-						<a href="#">Comment</a>
-						</div>
-						</div>
-						</div>`);
+					</div>
+				</div>
+				<div class="row"></div>
+				<%include partials/footer%>
+			</body>
+			<script>
+				$(".dropdown-trigger").dropdown();
 
-				},
-				err: function(){
+				$("#submit_status_button").on("click", function(){
+					var status_val = $("#icon_prefix2").val();
+					$("#icon_prefix2").val("");
 
+					$.ajax({
+						url: "/user_status/create",
+						method: "POST",
+						contentType: "application/json",
+						data: JSON.stringify({"user_status": status_val}),
+						success: function(saved_status){
+							var profile_pic = `<i class="material-icons" style="margin: 30; color: #ee6e73; font-size: 7rem; display: block;">face</i>`;
+							$("#user_statuses").prepend(`<div class="card horizontal"><div class="card-image">	
+								${profile_pic}
+								</div>
+								<div class="card-stacked">
+								<div class="card-content">
+								<span class="card-title">${saved_status.name} @${saved_status.status_date.toLocaleString()}</span>
+								${saved_status.user_status}
+								</div>
+								<div class="card-action">
+								<a href="#">Comment</a>
+								</div>
+								</div>
+								</div>`);
+
+						},
+						err: function(){
+
+						}
+					})
+				});
+
+				document.addEventListener("DOMContentLoaded", function(event) { 
+					$.ajax({
+						url: "/find_friends",
+						method: "GET",
+						contentType: "application/json",
+						success: function(friend_list){
+							document.getElementById('find-friends').innerHTML = friend_list;
+						},
+						err: function(){
+
+						}
+					})
+				});
+
+				$(".material-icons add_friend").on("click", function () {
+					console.log("klik!")
+					var clicked_button = $(this);
+					$.ajax({
+						method:"POST",
+						url:"/friend_request",
+						contentType: "application/json",
+						data: JSON.stringify({"friend_member_id": clicked_button.attr("id")}),
+						success: function() {
+							clicked_button.closest("collection-item").remove();
+							M.toast({html: 'Friend request sent!'})
+						},
+						error: function () {
+							console.log("oops")
+							M.toast({html: 'Something went wrong.'})
+						}
+
+					});
+				})
+
+				function add_friend(id) {
+					console.log(id);
+					$.ajax({
+						method:"POST",
+						url:"/friend_request",
+						contentType: "application/json",
+						data: JSON.stringify({"friend_member_id": id}),
+						success: function() {
+							clicked_button.closest("collection-item").remove();
+							M.toast({html: 'Friend request sent!'})
+						},
+						error: function () {
+							console.log("oops")
+							M.toast({html: 'Something went wrong.'})
+						}
+
+					});
 				}
-			})
-		});
 
-		document.addEventListener("DOMContentLoaded", function(event) { 
-			$.ajax({
-				url: "/find_friends",
-				method: "GET",
-				contentType: "application/json",
-				success: function(friend_list){
-					document.getElementById('find-friends').innerHTML = friend_list;
-				},
-				err: function(){
+				$(document).ready(function(){
+				    $('.collapsible').collapsible();
+				});
 
-				}
-			})
-		});
-
-		$(".material-icons add_friend").on("click", function () {
-			console.log("klik!")
-			var clicked_button = $(this);
-			$.ajax({
-				method:"POST",
-				url:"/friend_request",
-				contentType: "application/json",
-				data: JSON.stringify({"friend_member_id": clicked_button.attr("id")}),
-				success: function() {
-					clicked_button.closest("collection-item").remove();
-					M.toast({html: 'Friend request sent!'})
-				},
-				error: function () {
-					console.log("oops")
-					M.toast({html: 'Something went wrong.'})
-				}
-
-			});
-		})
-
-		function add_friend(id) {
-			console.log(id);
-			$.ajax({
-				method:"POST",
-				url:"/friend_request",
-				contentType: "application/json",
-				data: JSON.stringify({"friend_member_id": id}),
-				success: function() {
-					clicked_button.closest("collection-item").remove();
-					M.toast({html: 'Friend request sent!'})
-				},
-				error: function () {
-					console.log("oops")
-					M.toast({html: 'Something went wrong.'})
-				}
-
-			});
-		}
-		
-	</script>
-	</html>
+			</script>
+			</html>

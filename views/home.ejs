@@ -118,13 +118,11 @@
 		});
 
 		document.addEventListener("DOMContentLoaded", function(event) { 
-			console.log("trazim prijatelje")
 			$.ajax({
 				url: "/find_friends",
 				method: "GET",
 				contentType: "application/json",
 				success: function(friend_list){
-					console.log(friend_list);
 					document.getElementById('find-friends').innerHTML = friend_list;
 				},
 				err: function(){
@@ -132,6 +130,45 @@
 				}
 			})
 		});
+
+		$(".material-icons add_friend").on("click", function () {
+			console.log("klik!")
+			var clicked_button = $(this);
+			$.ajax({
+				method:"POST",
+				url:"/friend_request",
+				contentType: "application/json",
+				data: JSON.stringify({"friend_member_id": clicked_button.attr("id")}),
+				success: function() {
+					clicked_button.closest("collection-item").remove();
+					M.toast({html: 'Friend request sent!'})
+				},
+				error: function () {
+					console.log("oops")
+					M.toast({html: 'Something went wrong.'})
+				}
+
+			});
+		})
+
+		function add_friend(id) {
+			console.log(id);
+			$.ajax({
+				method:"POST",
+				url:"/friend_request",
+				contentType: "application/json",
+				data: JSON.stringify({"friend_member_id": id}),
+				success: function() {
+					clicked_button.closest("collection-item").remove();
+					M.toast({html: 'Friend request sent!'})
+				},
+				error: function () {
+					console.log("oops")
+					M.toast({html: 'Something went wrong.'})
+				}
+
+			});
+		}
 		
 	</script>
 	</html>

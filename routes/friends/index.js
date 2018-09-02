@@ -12,7 +12,7 @@ module.exports = {
 				handler: async(request, h) => {
 					var odgovor;
 					await new Promise((resolve, reject) => User.find({"email": {$ne: request.auth.credentials.user}}, function(err, users){
-						odgovor = h.view("find_friends", {users: users});
+						odgovor = h.view("partials/find_friends", {users: users});
 						resolve();
 					}));
 					return odgovor;

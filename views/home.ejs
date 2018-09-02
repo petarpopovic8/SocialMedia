@@ -159,7 +159,7 @@
 				contentType: "application/json",
 				data: JSON.stringify({"friend_member_id": id}),
 				success: function() {
-					clicked_button.closest("collection-item").remove();
+					//clicked_button.closest("collection-item").remove();
 					M.toast({html: 'Friend request sent!'})
 				},
 				error: function () {

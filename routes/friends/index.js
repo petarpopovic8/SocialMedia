@@ -26,15 +26,16 @@ module.exports = {
 				auth: "simple-cookie-strategy",
 				handler: async(request, h) => {
 					var odgovor = null;
-					await new Promise((resolve, reject) => User.find({"email": request.auth.credentials.user, function(err, sending_user){
-
-						User.find({"member_id" : request.payload.friend_member_id, function(err, added_user){
-							
+					await new Promise((resolve, reject) => User.find({"email": request.auth.credentials.user}, function(err, sending_user){
+						
+						if(err) reject();
+						User.find({"member_id" : request.payload.friend_member_id}, function(err, added_user){
 							added_user[0].update({$push: {"friend_requests": {"member_id": sending_user[0].member_id, 
 							"friend_name": sending_user[0].name, "profile_pic": sending_user[0].user_profile[0].profile_pic}}})
-						}})
+							console.log(added_user);
+						})
 						resolve();
-					}}));
+					}));
 					return odgovor;
 				}
 			}

@@ -16,15 +16,18 @@ module.exports = {
 					var odgovor
 					var name = request.auth.credentials.name;
 					var user_statuses;
+					var friend_requests;
 					await UserStatus.find({}, function(err, statuses){
 						user_statuses = statuses;
 						console.log("user_statuses", user_statuses);
-					})
-					console.log("pozz: ", name);	
+					})	
 					user_statuses.sort(function(a, b) {
 						return b.status_date - a.status_date;
 					});
-					return h.view('home', {name: name, user_statuses: user_statuses});
+					await User.findOne({"email": request.auth.credentials.user}, function(err, user){
+						friend_requests = user.friend_requests;
+					});	
+					return h.view('home', {name: name, user_statuses: user_statuses, friend_requests: friend_requests});
 				}
 			}
 			

@@ -11,8 +11,15 @@
 							<div class="collapsible-header">
 								<i class="material-icons">filter_drama</i>
 								Friend requests
-								<span class="new badge">4</span></div>
-								<div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+								<span class="new badge"><%friend_requests.length%></span></div>
+								<div class="collapsible-body">
+									<div class="collection">
+										<%friend_requests.forEach(request => {%>
+										<a href="#!" class="collection-item"><%request.friend_name%></a>
+										<%})%>
+									</div>
+
+								</div>
 							</li>
 							<li>
 								<div class="collapsible-header">
@@ -194,7 +201,7 @@
 				}
 
 				$(document).ready(function(){
-				    $('.collapsible').collapsible();
+					$('.collapsible').collapsible();
 				});
 
 			</script>

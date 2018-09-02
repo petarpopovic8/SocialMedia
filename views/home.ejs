@@ -33,7 +33,7 @@
 				<%user_statuses.forEach(function(user_status) {%>
 				<div class="card horizontal">
 					<div class="card-image">	
-						<% if (user_status.profile_pic) {%>
+						<% if (!user_status.profile_pic) {%>
 						<i class="material-icons" style="margin: 30; color: #ee6e73; font-size: 7rem; display: block;">face</i>
 						<%} else {%>
 						<img src="http://localhost:3000/user_profile_images/<%=user_status.profile_pic%>">

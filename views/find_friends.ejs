@@ -1,0 +1,14 @@
+<html>
+	<body>
+		<h1>Find your friends!</h1>
+		<%users.forEach(function(friend){%>
+			<div>
+				<div>			<!-- Ovo je div za pokazivanje slike-->
+					<img src="http://localhost:3000/user_profile_images/<%=friend.user_profile[0].profile_pic%>">
+				</div>
+				<h3><%=friend.name%></h3>
+				<button id ="<%=friend.member_id%>"  class="request_button" type="button">+ Friend Request</button>
+			</div>
+		<%})%>
+	</body>
+</html>

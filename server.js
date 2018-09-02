@@ -66,6 +66,10 @@ server.register({
 	plugin: require('./routes/user_profile')
 })
 
+server.register({
+	plugin: require('./routes/friends')
+})
+
 
 server.route({
 	method: "GET",

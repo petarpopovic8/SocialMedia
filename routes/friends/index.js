@@ -3,7 +3,7 @@ const Mongoose = require("Mongoose");
 
 
 module.exports = {
-	name: "find_friends",
+	name: "friends",
 	register: async(plugin, options) => {
 		plugin.route([
 		{
@@ -71,6 +71,26 @@ module.exports = {
 					}))
 					return null;
 				}		
+			}
+		},
+		{
+			method: "GET",
+			path: "/friends",
+			config: {
+				auth: "simple-cookie-strategy",
+				handler: async(request, h) => {
+					var odgovor;
+					await new Promise((resolve, reject) => User.find({"email": request.auth.credentials.user}, function(err, user){
+						var friends = user.friends.sort(function(a, b) {
+   								var textA = a.friend_name;
+    							var textB = b.friend_name;
+   								return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+						}
+						odgovor = h.view("partials/friends", {friends: friends});
+						resolve();
+					}));
+					return odgovor;
+				}
 			}
 		}	
 		])

@@ -46,9 +46,11 @@ module.exports = {
 				await new Promise((resolve, reject) => User.findOne({"email": request.payload.email, "password": request.payload.password}, function(err, valid_user){
 					if(valid_user){
 						request.cookieAuth.set({"user": valid_user.email, "member_id": valid_user.member_id, "name": valid_user.name});
+						resolve();
 						
 					} else {
 						odgovor = Boom.badRequest('Krivi username ili šifra');
+						resolve();
 					}
 				}));
 				return odgovor;

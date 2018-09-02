@@ -139,6 +139,18 @@
 			$('.tabs').tabs();
 		});
 
+		$("#accept_friend_request").on("click", function(){
+			var friend_member_id = $(this).parent().attr("id");
+			$.ajax({
+				method: "POST",
+				url: "/accept_friend_request",
+				contentType: "json",
+				data: JSON.stringify({"member_id": friend_member_id}),
+				success: function(){
+					
+				}
+			})
+		})
 
 	</script>
 	</html>

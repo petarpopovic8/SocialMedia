@@ -11,8 +11,15 @@
 							<div class="collapsible-header">
 								<i class="material-icons">filter_drama</i>
 								Friend requests
-								<span class="new badge">4</span></div>
-								<div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+								<span class="new badge"><%friend_requests.length%></span></div>
+								<div class="collapsible-body">
+									<div class="collection">
+										<%friend_requests.forEach(request => {%>
+										<a href="#!" class="collection-item"><%request.friend_name%></a>
+										<%})%>
+									</div>
+
+								</div>
 							</li>
 							<li>
 								<div class="collapsible-header">
@@ -53,7 +60,8 @@
 				<div class="section">
 					<div class="row">
 						<div class="col s4" >
-							<ul class="collection" id="find-friends">
+							<ul class="collection with-header" id="find-friends">
+								<li class="collection-header"><h4>Find friends</h4></li>
 								<li>
 									<div class="col s4 offset-s4 center-align" style="margin-top: 10%; margin-bottom: 10%">
 										<div class="preloader-wrapper big active">
@@ -181,7 +189,7 @@
 						contentType: "application/json",
 						data: JSON.stringify({"friend_member_id": id}),
 						success: function() {
-							//clicked_button.closest("collection-item").remove();
+							$('#' + id).parent().parent().fadeOut();
 							M.toast({html: 'Friend request sent!'})
 						},
 						error: function () {
@@ -193,7 +201,7 @@
 				}
 
 				$(document).ready(function(){
-				    $('.collapsible').collapsible();
+					$('.collapsible').collapsible();
 				});
 
 			</script>

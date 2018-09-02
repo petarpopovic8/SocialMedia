@@ -51,6 +51,7 @@ module.exports = {
 			config: {
 				auth: "simple-cookie-strategy",
 				handler: async(request, h) => {
+					console.log(request.payload);
 					await new Promise((resolve, reject) => User.find({"email": request.auth.credentials.user}, function(err, user){
 						if(err) reject();
 						User.find({"member_id" : request.payload.member_id}, function(err, accepted_user){

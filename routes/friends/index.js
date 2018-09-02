@@ -85,7 +85,7 @@ module.exports = {
    								var textA = a.friend_name;
     							var textB = b.friend_name;
    								return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-						}
+						});
 						odgovor = h.view("partials/friends", {friends: friends});
 						resolve();
 					}));

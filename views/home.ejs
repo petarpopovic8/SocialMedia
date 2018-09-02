@@ -18,10 +18,10 @@
 								<%}%>
 								<div class="collapsible-body">
 									<%friend_requests.forEach(request => {%>
-									<div class="row">
+									<div class="row" id="friend-request <%=request.member_id%>">
 										<a href="#!" class="col s7"><%=request.friend_name%></a>
-										<a class="waves-effect waves-light btn-small col s2">accept</a>
-										<a class="waves-effect waves-light btn-small btn-default grey lighten-3 col s2 offset-s1">decline</a>
+										<a class="waves-effect waves-light btn-small col s2" onclick="accept_friend_request(this)">accept</a>
+										<a class="waves-effect waves-light btn-small btn-default grey lighten-3 col s2 offset-s1"  onclick="decline_friend_request(this)">decline</a>
 									</div>								
 									<%})%>
 								</div>
@@ -208,6 +208,38 @@
 				$(document).ready(function(){
 					$('.collapsible').collapsible();
 				});
+
+				function accept_friend_request(elem){
+					var friend_member_id = $(elem).parent().attr("id").split(' ')[1];
+					$.ajax({
+						method: "POST",
+						url: "/accept_friend_request",
+						contentType: "application/json",
+						data: JSON.stringify({"member_id": friend_member_id}),
+						success: function(){
+							$(elem).parent().fadeOut();
+						},
+						error: function(){
+							M.toast({html: 'Something went wrong.'})
+						}
+					})
+				};
+
+				function decline_friend_request(elem){
+					var friend_member_id = $(elem).parent().attr("id").split(' ')[1];
+					$.ajax({
+						method: "POST",
+						url: "/decline_friend_request",
+						contentType: "application/json",
+						data: JSON.stringify({"member_id": friend_member_id}),
+						success: function(){
+							$(elem).parent().fadeOut();
+						},
+						error: function(){
+							M.toast({html: 'Something went wrong.'})
+						}
+					})
+				}
 
 			</script>
 			</html>

@@ -75,15 +75,14 @@
 			</form>
 		</div>
 		<div>
-			<h2>Friend Requests</h2>
+			<h2>Friends</h2>     <!--Neka ivana za requeste prebaci informacije u home.ejs pa tek onda mergajte  -->
 			<ul>
-				<%user.friend_requests.forEach(function(request){%>
+				<%user.friends.forEach(function(friend){%>
 				<li>
-					<div id="<%=request.member_id%>">
-						<img src="http://localhost:3000/user_profile_images/<%=request.profile_pic%>">
-						<%=request.friend_name%>
-						<button id="accept_friend_request" type="submit">Accept</button>
-						<button id="decline_friend_request" type="submit">Decline</button>
+					<div id="<%=friend.member_id%>">
+						<img src="http://localhost:3000/user_profile_images/<%=friend.profile_pic%>">
+						<%=friend.friend_name%>
+						<%=friend.location%>
 					</div>
 				</li>
 				<%})%>

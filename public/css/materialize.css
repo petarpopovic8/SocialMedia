@@ -5227,6 +5227,10 @@ small {
   color: #9F9F9F !important;
 }
 
+.btn-default {
+  color: #9F9F9F !important;
+}
+
 .btn, .btn-large, .btn-small,
 .btn-floating,
 .btn-large,

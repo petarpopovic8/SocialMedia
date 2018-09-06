@@ -12,9 +12,9 @@
 			<ul class="collection with-header">
 				<li class="collection-header"><h4><%=user.name%></h4></li>
 				<li class="collection-item"></li>
-				<li class="collection-item"><i class="material-icons">location_on</i>  <%=user.location%></li>
+				<li class="collection-item"><i class="material-icons">location_on</i>  <%=user.user_profile[0].location%></li>
 				<li class="collection-item"><i class="material-icons">email</i>  <%=user.email%></li>
-				<li class="collection-item"><%user.interests.forEach(function(interest) {%>
+				<li class="collection-item"><%user.user_profile[0].interests.forEach(function(interest) {%>
 					<div class="chip">
 						<%=interest.replace('"', '').replace("[", "").replace("]", "").replace('"','')%>
 					</div>
@@ -25,23 +25,23 @@
 					<a href="#!" class="collection-item">Unfriend</a>
 					<a href="#!" class="collection-item">Edit</a>
 				</div>
-
 			</div>
+
 			<div class="col s9">
 				<ul class="collection">
-					<li class="collection-item"><%=user.bio%></li>
+					<li class="collection-item"><%=user.user_profile[0].bio%></li>
 				</ul>
 				<div class="row">
 					<div class="col s12">
 						<ul class="tabs">
 							<li class="tab col s4"><a href="#test1">Timeline</a></li>
 							<li class="tab col s4"><a href="#test2">Photos</a></li>
-							<li class="tab col s4"><a class="active" href="#test4">Friends</a></li>
+							<li class="tab col s4" onclick="display_Friends()"><a class="active" href="#test4">Friends</a></li>
 						</ul>
 					</div>
 				</div>
-				<div class="row">
-					<%include partials/friends%>
+				<div class="row" id="current_tab">
+					
 				</div>
 			</div>
 		</div>
@@ -55,15 +55,15 @@
 					</li>
 					<li>
 						<label for="location">Location</label>
-						<input type="text" name ="location" value="<%=user.location%>">
+						<input type="text" name ="location" value="<%=user.user_profile[0].location%>">
 					</li>
 					<li>
 						<label for="bio">Bio</label>
-						<textarea rows="3" cols ="40" name="bio"><%=user.bio%></textarea>
+						<textarea rows="3" cols ="40" name="bio"><%=user.user_profile[0].bio%></textarea>
 					</li>
 					<li>
 						<label for="interests">Interests</label>
-						<textarea rows="1" cols ="40" name="interests"><%=user.interests%></textarea>
+						<textarea rows="1" cols ="40" name="interests"><%=user.user_profile[0].interests%></textarea>
 					</li>
 					<li>
 						<label for="profile_pic">Profile Picture</label>
@@ -96,6 +96,21 @@
 		$("#cancel_edit_profile").on("click", function(){
 			$("#edit_profile_form_container").hide();
 		});
+
+		function display_Friends(){
+			$.ajax({
+				url: "/friends",
+				method: "GET",
+				contentType: "application/json",
+				success: function(friends){
+					document.getElementById('current_tab').innerHTML = friends;
+				},
+				err: function(){
+
+				}
+			})
+
+		}
 
 		function uploadProfileImage(){
 			var image_to_upload = $("#upload_profile_pic")[0].files[0];

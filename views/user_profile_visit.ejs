@@ -1,0 +1,106 @@
+<html>
+<%include partials/header%>
+<body>
+	<%include partials/navbar%>
+	<div class="carousel carousel-slider">
+		<a class="carousel-item" href="#one!"><img src="/images/landing2.jpg"></a>
+		<a class="carousel-item" href="#two!"><img src="/images/landing1.jpg"></a>
+		<a class="carousel-item" href="#three!"><img src="/images/2000.jpg"></a>
+	</div>								
+	<div class="row">
+		<div class="col s3">
+			<ul class="collection with-header">	<!--isFriend: {0 - user nije prijatelj; 1 - user je korisnik; 2 - user je prijatelj-->
+				<li class="collection-header"><h4><%=user.name%></h4></li>
+				<li class="collection-item"></li>
+				<li class="collection-item"><i class="material-icons">location_on</i>  <%=user.user_profile[0].location%></li>
+				<li class="collection-item"><i class="material-icons">email</i>  <%=user.email%></li>
+				<li class="collection-item"><%user.user_profile[0].interests.forEach(function(interest) {%>
+					<div class="chip">
+						<%=interest.replace('"', '').replace("[", "").replace("]", "").replace('"','')%>
+					</div>
+					<%})%></li>
+				</ul>
+				<div class="collection">
+					<a href="#!" class="collection-item">Send message</a>
+					<a href="#!" class="collection-item">Unfriend</a>
+					<a href="#!" class="collection-item">Edit</a>
+				</div>
+			</div>
+
+			<div class="col s9">
+				<ul class="collection">
+					<li class="collection-item"><%=user.user_profile[0].bio%></li>
+				</ul>
+				<div class="row">
+					<div class="col s12">
+						<ul class="tabs">
+							<li class="tab col s4"><a href="#test1">Timeline</a></li>
+							<li class="tab col s4"><a href="#test2">Photos</a></li>
+							<li class="tab col s4" onclick="display_Friends()"><a class="active" href="#test4">Friends</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row" id="current_tab">
+					
+				</div>
+			</div>
+		</div>
+
+		<div id="modal1" class="modal bottom-sheet">
+			<div class="modal-content">
+				<h4>Modal Header</h4>
+				<p>A bunch of text</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+			</div>
+		</div>
+
+		
+		<script>
+			function display_Friends(){
+				$.ajax({
+					url: "/user_profile/<%=user.member_id%>/friends",
+					method: "GET",
+					contentType: "application/json",
+					success: function(friends){
+						document.getElementById('current_tab').innerHTML = friends;
+					},
+					err: function(){
+
+					}
+				})
+
+			}
+
+			$('.carousel.carousel-slider').carousel({
+				fullWidth: true
+			});
+
+			$(document).ready(function(){
+				$('.tabs').tabs();
+			});
+
+			$("#accept_friend_request").on("click", function(){
+				var friend_member_id = $(this).parent().attr("id");
+				$.ajax({
+					method: "POST",
+					url: "/accept_friend_request",
+					contentType: "application/json",
+					data: JSON.stringify({"member_id": friend_member_id}),
+					success: function(){
+
+					}
+				})
+			});
+
+			function openChat(){
+    			console.log(" i tu!");
+    			$("#modal1").modal();
+    			$("#modal1").modal('open');
+    			$(".chat_close").on("click", function(){
+    				$("#modal1").modal('close');
+    			})
+    		}
+		</script>
+		</html>

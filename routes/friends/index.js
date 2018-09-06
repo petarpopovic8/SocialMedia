@@ -81,7 +81,7 @@ module.exports = {
 				handler: async(request, h) => {
 					var odgovor;
 					await new Promise((resolve, reject) => User.find({"email": request.auth.credentials.user}, function(err, user){
-						var friends = user.friends.sort(function(a, b) {
+						var friends = user[0].friends.sort(function(a, b) {
    								var textA = a.friend_name;
     							var textB = b.friend_name;
    								return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;

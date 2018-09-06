@@ -15,6 +15,7 @@ module.exports = {
 				handler: async (request, h) => {
 					var odgovor
 					var name = request.auth.credentials.name;
+					var member_id = request.auth.credentials.member_id;
 					var user_statuses;
 					var friend_requests = [];
 					await UserStatus.find({}, function(err, statuses){
@@ -32,7 +33,7 @@ module.exports = {
 							resolve();
 						});
 					}));	
-					return h.view('home', {name: name, user_statuses: user_statuses, friend_requests: friend_requests});
+					return h.view('home', {name: name, member_id: member_id, user_statuses: user_statuses, friend_requests: friend_requests});
 				}
 			}
 			

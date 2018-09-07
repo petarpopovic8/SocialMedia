@@ -7,7 +7,7 @@
 				<span class="title"><%=friend.friend_name%></span>
 				<p><%=friend.location%><br>
 					<button onclick="window.location.href='http://localhost:3000/user_profile/<%=friend.member_id%>'" type="button">Go to Profile</button>
-					<button class="chat_button" type="button" onclick="openChat()" data-target="#modal12">Chat</button>
+					<button class="chat_button" type="button" onclick="openChat()" id="<%=friend.member_id%>">Chat</button>
 			</li>
 			<%})%>
 		</ul>

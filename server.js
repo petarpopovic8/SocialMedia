@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const User = require("./database_models/user_model");
 const node_connect_db = mongoose.connect("mongodb://localhost/node_connect");
 const Boom = require("Boom");
-const sync = require("sync");
+const io = require("socket.io")(server.listener);
 
 server.start(console.log("test"));
 
@@ -99,3 +99,23 @@ server.register({
 const start = async() => {
 	await server.register(require("./routes/user"));
 }
+
+io.on("connection", function(socket){   //listener for successfuly established websocket connection
+										//callback will run once successful connection has been made
+	socket.on("attach_user_info", function(user_info){		//atttaching user information so users can send messages to each other
+		socket.member_id = user_info.member_id;
+		socket.user_name = user_info.user_name;
+	})
+
+
+	socket.on("message_from_client", function(usr_msg){    //returning a message from the connected client
+		var all_connected_clients = io.sockets.connected;	//all open websocket connections
+		for(var socket_id in all_connected_clients){
+			if(all_connected_clients[socket_id].member_id === usr_msg.friend_member_id){	//iteriramo kroz objekt, ne polje
+				var message_object = {"msg": usr_msg.msg, "user_name": socket.user_name};	//što je onda [socket_id]??
+				all_connected_clients[socket_id].emit("message_from_server", message_object);
+				break; 												//once we find out the recieving user's information
+			}
+		}
+	})
+})

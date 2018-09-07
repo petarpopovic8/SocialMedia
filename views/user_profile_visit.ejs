@@ -21,7 +21,7 @@
 					<%})%></li>
 				</ul>
 				<div class="collection">
-					<a href="#!" class="collection-item">Send message</a>
+					<a href="#!" class="collection-item" onclick="openChat()">Send message</a>
 					<a href="#!" class="collection-item">Unfriend</a>
 					<a href="#!" class="collection-item">Edit</a>
 				</div>
@@ -46,14 +46,26 @@
 			</div>
 		</div>
 
-		<div id="modal1" class="modal bottom-sheet">
-			<div class="modal-content">
-				<h4>Modal Header</h4>
-				<p>A bunch of text</p>
+		<div id="modal1" class="modal">
+			<div id="chat_title_section" class="modal-content">
+				<div class="section">
+				<h4>Send message to <%=user.name%></h4>
 			</div>
-			<div class="modal-footer">
-				<a href="#" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-			</div>
+			<div class="divider"></div>
+				<div id="messages" class="section">
+					<div class="row">
+						<form class="col s12">
+								<div class="input-field">
+									<textarea id="send_message_input" class="materialize-textarea"></textarea>
+									<label for="textarea1">Message</label>
+								</div>
+						</form>
+					</div>
+					<div id="send_message" class="modal-footer">		
+					<a class="waves-effect waves-light btn right"><i class="material-icons right">message</i>SEND</a>
+				</div>
+				</div>
+			</div>				
 		</div>
 
 		
@@ -95,12 +107,12 @@
 			});
 
 			function openChat(){
-    			console.log(" i tu!");
-    			$("#modal1").modal();
-    			$("#modal1").modal('open');
-    			$(".chat_close").on("click", function(){
-    				$("#modal1").modal('close');
-    			})
-    		}
+				console.log(" i tu!");
+				$("#modal1").modal();
+				$("#modal1").modal('open');
+				$(".chat_close").on("click", function(){
+					$("#modal1").modal('close');
+				})
+			}
 		</script>
 		</html>

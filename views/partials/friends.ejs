@@ -1,102 +1,26 @@
+
 <div class="row">
 	<div class="col s6"> 
 		<ul class="collection">
 			<%friends.forEach(function(friend){%>
 			<li class="collection-item avatar" id="<%=friend.member_id%>">
+				<%if (friend.profile_pic == null) {%>
 				<img src="http://localhost:3000/user_profile_images/<%=friend.profile_pic%>" alt="" class="circle">
+<<<<<<< HEAD
 				<span class="title"><%=friend.friend_name%></span>
 				<p><%=friend.location%><br>
 					<button onclick="window.location.href='http://localhost:3000/user_profile/<%=friend.member_id%>'" type="button">Go to Profile</button>
 					<button class="chat_button" type="button" onclick="openChat()" id="<%=friend.member_id%>">Chat</button>
+=======
+				<%} else {%>
+				<i class="material-icons circle">face</i>
+				<%}%>
+				<a href='http://localhost:3000/user_profile/<%=friend.member_id%>'><span class="title"><%=friend.friend_name%></span></a>
+				<p><%=friend.location%>
+>>>>>>> 68742ba114d907a52b8676f996cbfd47ddcb9444
 			</li>
 			<%})%>
 		</ul>
-		<div id="modal1" class="modal bottom-sheet">
-			<div id="chat_title_section">
-				<h4>Spang chat</h4>
-			</div>
-			<div class="all_chat_messages">
-			</div>
-			<div id="send_message">
-				<input id="send_message_input" type="text" placeholder="Send Message">
-			</div>
-		</div>
 	</div>
-	<div class="col s6"> 
-		<ul class="collection with-header">
-			<li class="collection-header"><h4>C</h4></li>
-			<li class="collection-item avatar">
-				<img src="images/yuna.jpg" alt="" class="circle">
-				<span class="title">Title</span>
-				<p>First Line <br>
-					Second Line
-				</p>
-				<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-			</li>
-			<li class="collection-item avatar">
-				<i class="material-icons circle">folder</i>
-				<span class="title">Title</span>
-				<p>First Line <br>
-					Second Line
-				</p>
-				<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-			</li>
-			<li class="collection-item avatar">
-				<i class="material-icons circle green">insert_chart</i>
-				<span class="title">Title</span>
-				<p>First Line <br>
-					Second Line
-				</p>
-				<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-			</li>
-			<li class="collection-item avatar">
-				<i class="material-icons circle red">play_arrow</i>
-				<span class="title">Title</span>
-				<p>First Line <br>
-					Second Line
-				</p>
-				<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-			</li>
-		</ul>
-		<ul class="collection with-header">
-			<li class="collection-header"><h4>D</h4></li>
-			<li class="collection-item avatar">
-				<img src="images/yuna.jpg" alt="" class="circle">
-				<span class="title">Title</span>
-				<p>First Line <br>
-					Second Line
-				</p>
-				<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-			</li>
-			<li class="collection-item avatar">
-				<i class="material-icons circle">folder</i>
-				<span class="title">Title</span>
-				<p>First Line <br>
-					Second Line
-				</p>
-				<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-			</li>
-			<li class="collection-item avatar">
-				<i class="material-icons circle green">insert_chart</i>
-				<span class="title">Title</span>
-				<p>First Line <br>
-					Second Line
-				</p>
-				<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-			</li>
-			<li class="collection-item avatar">
-				<i class="material-icons circle red">play_arrow</i>
-				<span class="title">Title</span>
-				<p>First Line <br>
-					Second Line
-				</p>
-				<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-
-			</li>
-		</ul>
-	</div>
-</div>
-<div id="chat_section_wrapper">
-	
 </div>
 

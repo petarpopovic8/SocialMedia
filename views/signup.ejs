@@ -54,7 +54,7 @@
 										<div class="file-field input-field">
 											<div class="material-icons">
 												<i class="material-icons" style="margin: 40px 0; color: #ee6e73; font-size: 7rem; display: block;">face</i>
-												<input type="file" id="avatar">
+												<input type="file" id="upload_profile_pic" onchange="uploadProfileImage()">
 											</div>
 											<div class="file-path-wrapper">
 												<input class="file-path validate" type="text" placeholder="avatar file">
@@ -117,6 +117,11 @@
 		var password = $('#password').val();
 		var avatar = $('#avatar').val();
 		var bio = $('#icon_prefix2').val();
+		var image_data;
+		var image_to_upload = $("#upload_profile_pic")[0].files[0];
+		var reader = new FileReader()
+		reader.readAsDataURL(image_to_upload);
+
 
 		console.log(first_name);
 		console.log(last_name);
@@ -125,6 +130,12 @@
 		console.log(avatar);
 		console.log(bio);
 		console.log(M.Chips.getInstance($('.chips')).chipsData.map(x => x.tag));
+		console.log("image_to_upload", image_to_upload);
+
+		reader.onload = function(){
+			console.log("result", reader.result);
+			var image_data = {"image_data": reader.result.split(',')[1], "image_type": image_to_upload.type.split("/")[1]};
+		}
 
 		$.ajax({
 			method: "POST",
@@ -147,6 +158,27 @@
 
 	});
 	}
+
+	function uploadProfileImage(){
+			var image_to_upload = $("#upload_profile_pic")[0].files[0];
+			console.log("image_to_upload", image_to_upload);
+			var reader = new FileReader();
+			reader.readAsDataURL(image_to_upload);
+			reader.onload = function(){
+				console.log("result", reader.result);
+				var image_data = {"image_data": reader.result.split(',')[1], "image_type": image_to_upload.type.split("/")[1]};
+				$.ajax({
+					method: "POST",
+					url: "profile_pic/upload",
+					data: JSON.stringify(image_data),
+					contentType: "application/json",
+					success: function(updated_profile_pic) {
+						$(".profile_info img").remove();
+						$("#profile_picture_div").append(`<img src="http://localhost:3000/user_profile_images/${updated_profile_pic}">`);
+					}
+				})
+			}
+		}
 
 	$('.chips-placeholder').chips({
 		placeholder: 'Hobbies',

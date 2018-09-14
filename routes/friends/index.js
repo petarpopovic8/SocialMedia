@@ -1,5 +1,6 @@
 const User = require("../../database_models/user_model");
 const Mongoose = require("Mongoose");
+const Boom = require("Boom");
 
 
 module.exports = {
@@ -81,6 +82,20 @@ module.exports = {
 				handler: async(request, h) => {
 					var odgovor;
 					await new Promise((resolve, reject) => User.find({"email": request.auth.credentials.user}, function(err, user){
+						user[0].friends.forEach(function(friend){
+							User.findOne({"member_id": friend.member_id}, function(err, myfriend){
+								if(friend.profile_pic != myfriend.user_profile[0].profile_pic)
+									friend.profile_pic = myfriend.user_profile[0].profile_pic;
+								if(friend.location != myfriend.user_profile[0].location)
+									friend.location = myfriend.user_profile[0].location;
+								if(friend.name != myfriend.name)
+									friend.name = myfriend.name;
+							})
+						})
+						user[0].save(function(err, result){
+							if(err)
+								odgovor = Boom.badRequest('Došlo je do pogreške pri osvježavanju korisnikovih prijatelja');
+						})
 						var friends = user[0].friends.sort(function(a, b) {
    								var textA = a.friend_name;
     							var textB = b.friend_name;

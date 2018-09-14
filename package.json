@@ -14,7 +14,7 @@
     "hapi": "^17.5.4",
     "hapi-auth-cookie": "^9.0.0",
     "inert": "^5.1.0",
-    "mongoose": "^5.2.10",
+    "mongoose": "^4.5.0",
     "shortid": "^2.2.13",
     "socket.io": "^1.4.8",
     "touch": "^3.1.0",

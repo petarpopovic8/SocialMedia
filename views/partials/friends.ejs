@@ -4,20 +4,15 @@
 		<ul class="collection">
 			<%friends.forEach(function(friend){%>
 			<li class="collection-item avatar" id="<%=friend.member_id%>">
-				<%if (friend.profile_pic == null) {%>
+				<%if (friend.profile_pic != "default_profile.png") {%>
 				<img src="http://localhost:3000/user_profile_images/<%=friend.profile_pic%>" alt="" class="circle">
-<<<<<<< HEAD
-				<span class="title"><%=friend.friend_name%></span>
-				<p><%=friend.location%><br>
-					<button onclick="window.location.href='http://localhost:3000/user_profile/<%=friend.member_id%>'" type="button">Go to Profile</button>
-					<button class="chat_button" type="button" onclick="openChat()" id="<%=friend.member_id%>">Chat</button>
-=======
+
+			
 				<%} else {%>
 				<i class="material-icons circle">face</i>
 				<%}%>
 				<a href='http://localhost:3000/user_profile/<%=friend.member_id%>'><span class="title"><%=friend.friend_name%></span></a>
-				<p><%=friend.location%>
->>>>>>> 68742ba114d907a52b8676f996cbfd47ddcb9444
+				<p><%=friend.location%></p>
 			</li>
 			<%})%>
 		</ul>

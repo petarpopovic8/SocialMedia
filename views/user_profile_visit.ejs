@@ -49,21 +49,21 @@
 		<div id="modal1" class="modal">
 			<div id="chat_title_section" class="modal-content">
 				<div class="section">
-				<h4>Send message to <%=user.name%></h4>
-			</div>
-			<div class="divider"></div>
+					<h4>Send message to <%=user.name%></h4>
+				</div>
+				<div class="divider"></div>
 				<div id="messages" class="section">
 					<div class="row">
 						<form class="col s12">
-								<div class="input-field">
-									<textarea id="send_message_input" class="materialize-textarea"></textarea>
-									<label for="textarea1">Message</label>
-								</div>
+							<div class="input-field">
+								<textarea id="send_message_input" class="materialize-textarea"></textarea>
+								<label for="textarea1">Message</label>
+							</div>
 						</form>
 					</div>
 					<div id="send_message" class="modal-footer">		
-					<a class="waves-effect waves-light btn right"><i class="material-icons right">message</i>SEND</a>
-				</div>
+						<a class="waves-effect waves-light btn right"><i class="material-icons right">message</i>SEND</a>
+					</div>
 				</div>
 			</div>				
 		</div>
@@ -110,48 +110,48 @@
 				})
 			});
 			function openChat(){
-<<<<<<< HEAD
-    			$("#modal1").modal();
-    			$("#modal1").modal('open');
 
-    			$(".chat_close").on("click", function(){
-    				$("#modal1").modal('close');
-    			})
-    		}
-
-    		socket.on("message_from_server", function(received_msg){
-    			$(".all_chat_messages").append("<div class ='usr_msg'>" + 
-    												"<span class='user_with_message'>" + received_msg.user_name + ":" + "</span>" +
-    												"<div class='usr_msg_box'>" + 
-    												"<p>" + received_msg.msg + "</p>" +
-    												"</div>" + 
-    												"</div"
-    												)
-    		})
-
-    		$(document).on("keypress", "#send_message_input", function(e){
-    			if(e.keyCode === 13){
-    				var chat_message_content = $(this).val();
-    				$(".all_chat_messages").append("<div class ='usr_msg'>" + 
-    												"<span class='user_with_message'>You:</span>" +
-    												"<div class='usr_msg_box'>" + 
-    												"<p>" + chat_message_content + "</p>" +
-    												"</div>" + 
-    												"</div"
-    												)
-    				socket.emit("message_from_client", {"msg": chat_message_content, 
-    				 "friend_member_id": $(".chat_button").attr("id")})
-    				$(this).val("");
-    			}
-    		})
-=======
-				console.log(" i tu!");
 				$("#modal1").modal();
 				$("#modal1").modal('open');
+
 				$(".chat_close").on("click", function(){
 					$("#modal1").modal('close');
 				})
 			}
->>>>>>> 68742ba114d907a52b8676f996cbfd47ddcb9444
+
+			socket.on("message_from_server", function(received_msg){
+				$(".all_chat_messages").append("<div class ='usr_msg'>" + 
+					"<span class='user_with_message'>" + received_msg.user_name + ":" + "</span>" +
+					"<div class='usr_msg_box'>" + 
+					"<p>" + received_msg.msg + "</p>" +
+					"</div>" + 
+					"</div"
+					)
+			})
+
+			$(document).on("keypress", "#send_message_input", function(e){
+				if(e.keyCode === 13){
+					var chat_message_content = $(this).val();
+					$(".all_chat_messages").append("<div class ='usr_msg'>" + 
+						"<span class='user_with_message'>You:</span>" +
+						"<div class='usr_msg_box'>" + 
+						"<p>" + chat_message_content + "</p>" +
+						"</div>" + 
+						"</div"
+						)
+					socket.emit("message_from_client", {"msg": chat_message_content, 
+						"friend_member_id": $(".chat_button").attr("id")})
+					$(this).val("");
+				}
+			})
+
+			console.log(" i tu!");
+			$("#modal1").modal();
+			$("#modal1").modal('open');
+			$(".chat_close").on("click", function(){
+				$("#modal1").modal('close');
+			})
+			
+
 		</script>
 		</html>

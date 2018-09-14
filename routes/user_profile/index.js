@@ -41,8 +41,12 @@ module.exports = {
 						user.user_profile[0].location = request.payload.location;
 						user.user_profile[0].bio = request.payload.bio;
 						user.user_profile[0].interests = request.payload.interests;
+						console.log("Lokacija", request.payload.location);
+						console.log("Bio", request.payload.bio);
+						console.log("Interesi", request.payload.interests);
 						user.save(function(err, result){
 							if(err){
+								console.log("greška");
 								odgovor = Boom.badRequest('Došlo je do pogreške pri spremanju korisnikovih promjena!');
 								resolve();
 							} else {
@@ -62,7 +66,6 @@ module.exports = {
 				auth: "simple-cookie-strategy",
 				handler: async(request, h) => {
 					var odgovor;
-					console.log("image_data", request.payload.image_data);
 					var user_profile_image = "user_" + request.auth.credentials.member_id + "_" + shortid.generate() + "." + request.payload.image_type;
 					await new Promise((resolve, reject) => fs.writeFile("user_profile_images/" + user_profile_image, new Buffer(request.payload.image_data, "base64"), function(err){
 						if(!err){
@@ -71,11 +74,9 @@ module.exports = {
 								user.save(function(err, result){
 									if(err){
 										odgovor = Boom.badRequest('Došlo je do pogreške pri spremanju korisnikovih promjena!');
-										console.log("neuspješno spremanje!");
 										resolve();
 									} else {
-										UserStatus.updateOne({"user_email": request.auth.credentials.user}, {"profile_pic": user_profile_image}, function(err, result){
-											console.log("uspješno spremanje");
+										UserStatus.update({"user_email": request.auth.credentials.user}, {"profile_pic": user_profile_image}, {multi: true}, function(err, result){
 											odgovor = user_profile_image;
 											resolve();
 									  	})
@@ -138,8 +139,23 @@ module.exports = {
 				auth: "simple-cookie-strategy",
 				handler: async(request, h) => {
 					var odgovor;
-					await new Promise((resolve, reject) => User.findOne({"member_id": request.params.member_id}, function(err, user){
-						var friends = user.friends.sort(function(a, b) {
+					await new Promise((resolve, reject) => User.find({"member_id": request.params.member_id}, function(err, user){
+						user[0].friends.forEach(function(friend){
+							User.findOne({"member_id": friend.member_id}, function(err, myfriend){
+								console.log("profile_pic", myfriend.user_profile[0].profile_pic);
+								if(friend.profile_pic != myfriend.user_profile[0].profile_pic)
+									friend.profile_pic = myfriend.user_profile[0].profile_pic;
+								if(friend.location != myfriend.user_profile[0].location)
+									friend.location = myfriend.user_profile[0].location;
+								if(friend.name != myfriend.name)
+									friend.name = myfriend.name;
+							})
+						})
+						user[0].save(function(err, result){
+							if(err)
+								odgovor = Boom.badRequest('Došlo je do pogreške pri osvježavanju korisnikovih prijatelja');
+						})
+						var friends = user[0].friends.sort(function(a, b) {
    								var textA = a.friend_name;
     							var textB = b.friend_name;
    								return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;

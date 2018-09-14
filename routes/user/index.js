@@ -1,5 +1,7 @@
 const User = require("../../database_models/user_model");
 const Boom = require("Boom");
+const shortid = require("shortid");
+const fs = require("fs");
 
  
 module.exports = {
@@ -12,28 +14,37 @@ module.exports = {
 			path: "/sign_up",
 			handler: async (request, h) => {
 				var odgovor = null;
-				console.log(request.payload.interests);
-				await User.findOne({"email": request.payload.email}, function(err, existing_user){
+				await new Promise((resolve, reject) => User.findOne({"email": request.payload.email}, function(err, existing_user){
 					if(existing_user){
-						console.log("već postoji");
-						odgovor = Boom.badRequest('Email adresa već je registrirana');	
-						Boom.badRequest('Email adresa je zauzeta');
+						odgovor = Boom.badRequest('Email adresa već je registrirana');
+						resolve();	
 					}  //vidi šta je s ovim, kako vratit tekst i code?
-					 else{
-
+					else{
 						var user = new User({"email": request.payload.email,
 						"name": request.payload.name,
 						"password": request.payload.password, "user_profile": {
-							"bio": request.payload.bio, "interests": request.payload.interests, "profile_pic": request.payload.profile_pic
+							"bio": request.payload.bio, "interests": request.payload.interests
 						}});
-						request.cookieAuth.set({"user": user.email, "member_id": user.member_id, "name": user.name});
+						var user_profile_image = "user_" + user.member_id + "_" + shortid.generate() + "." + request.payload.image_type.replace(/['"]+/g, '');
+					 	fs.writeFile("user_profile_images/" + user_profile_image, new Buffer(request.payload.image_data, "base64"), function(err){
 
+						if(!err){
+						user.user_profile[0].profile_pic = user_profile_image;
+						request.cookieAuth.set({"user": user.email, "member_id": user.member_id, "name": user.name});
 						user.save(function(err, save_user_record){
-							if(err)
-							 	return Boom.badRequest('Ups! Nastao je error pri registraciji!');			
+							if(err){
+							 	return Boom.badRequest('Ups! Nastao je error pri registraciji!');
+							 	resolve();
+							}
+							else{
+								odgovor = user_profile_image;
+								resolve();
+							}		
 						})
-				  	 }
-				})
+				  	 
+						}});
+					}
+				}))		
 				return odgovor;				
 			}			
 		}, 

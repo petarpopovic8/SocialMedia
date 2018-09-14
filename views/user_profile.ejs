@@ -118,7 +118,6 @@
 			var reader = new FileReader();
 			reader.readAsDataURL(image_to_upload);
 			reader.onload = function(){
-				console.log("result", reader.result);
 				var image_data = {"image_data": reader.result.split(',')[1], "image_type": image_to_upload.type.split("/")[1]};
 				$.ajax({
 					method: "POST",

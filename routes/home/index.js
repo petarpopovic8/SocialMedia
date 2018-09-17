@@ -13,34 +13,31 @@ module.exports = {
 			config: {
 				auth: "simple-cookie-strategy",
 				handler: async (request, h) => {
-					var odgovor
-					var name = request.auth.credentials.name;
-					var member_id = request.auth.credentials.member_id;
+					var members = [];
 					var user_statuses = [];
 					var friend_requests = [];
 					await new Promise((resolve,reject) => User.findOne({"email": request.auth.credentials.user}, function(err, user){
-						var members = [];
 						members.push(user.member_id);
 						user.friends.forEach(function(friend){
 							members.push(friend.member_id);
-						})
-						console.log("members:", members);
-					 	UserStatus.find({"member_id": {$in: members}}, function(err, statuses){
-							user_statuses = statuses;
-							console.log("user_statuses", user_statuses);	
-						})
-						console.log(user_statuses);	
-						user_statuses.sort(function(a, b) {
-							return b.status_date - a.status_date;
 						})
 						user.friend_requests.forEach(x => friend_requests.push({member_id : x.member_id, friend_name: x.friend_name, profile_pic: x.profile_pic,
 						 isRead: x.isRead}));
 						user.friend_requests.forEach(x => x.isRead = true);
 						user.save(function(err, result){
-							resolve();
+							console.log("sejvo");
+							
 						});
+						resolve();
 					}));
-					return h.view('home', {name: name, member_id: member_id, user_statuses: user_statuses, friend_requests: friend_requests});
+					await new Promise((resolve, reject) => UserStatus.find({"member_id": {$in: members}}, function(err, statuses){
+							user_statuses = statuses;
+							user_statuses.sort(function(a, b) {
+								return b.status_date - a.status_date;
+							});
+							resolve();
+					}))
+					return h.view('home', {name: request.auth.credentials.name, member_id: request.auth.credentials.member_id, user_statuses: user_statuses, friend_requests: friend_requests});
 				}
 			}
 			

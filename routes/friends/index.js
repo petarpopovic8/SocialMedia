@@ -28,10 +28,7 @@ module.exports = {
 						})
 						resolve();
 					}));
-					console.log("ids", ids);
 					await new Promise((resolve, reject) => User.find({"member_id": {$nin: ids}}, function(err, users){
-						
-						console.log("users:", users);
 						odgovor = h.view("partials/find_friends", {users: users});
 						resolve();
 					}));

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
  
 var userStatusSchema = mongoose.Schema({
-	user_email: String,
+	member_id: String,
 	user_status: String,
 	name: String, 
 	profile_pic: String,

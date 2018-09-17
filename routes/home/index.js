@@ -16,23 +16,30 @@ module.exports = {
 					var odgovor
 					var name = request.auth.credentials.name;
 					var member_id = request.auth.credentials.member_id;
-					var user_statuses;
+					var user_statuses = [];
 					var friend_requests = [];
-					await UserStatus.find({}, function(err, statuses){
-						user_statuses = statuses;
-						console.log("user_statuses", user_statuses);
-					})	
-					user_statuses.sort(function(a, b) {
-						return b.status_date - a.status_date;
-					});
-					await new Promise((resolve, reject) => User.findOne({"email": request.auth.credentials.user}, function(err, user){
+					await new Promise((resolve,reject) => User.findOne({"email": request.auth.credentials.user}, function(err, user){
+						var members = [];
+						members.push(user.member_id);
+						user.friends.forEach(function(friend){
+							members.push(friend.member_id);
+						})
+						console.log("members:", members);
+					 	UserStatus.find({"member_id": {$in: members}}, function(err, statuses){
+							user_statuses = statuses;
+							console.log("user_statuses", user_statuses);	
+						})
+						console.log(user_statuses);	
+						user_statuses.sort(function(a, b) {
+							return b.status_date - a.status_date;
+						})
 						user.friend_requests.forEach(x => friend_requests.push({member_id : x.member_id, friend_name: x.friend_name, profile_pic: x.profile_pic,
 						 isRead: x.isRead}));
 						user.friend_requests.forEach(x => x.isRead = true);
 						user.save(function(err, result){
 							resolve();
 						});
-					}));	
+					}));
 					return h.view('home', {name: name, member_id: member_id, user_statuses: user_statuses, friend_requests: friend_requests});
 				}
 			}
@@ -46,7 +53,7 @@ module.exports = {
 				handler: async(request, h) => {
 					var odgovor;
 					await new Promise((resolve, reject) => User.findOne({"email": request.auth.credentials.user}, function(err, user){
-						var user_status = new UserStatus({"user_email": request.auth.credentials.user,
+						var user_status = new UserStatus({"member_id": request.auth.credentials.member_id,
 							"user_status": request.payload.user_status,
 							"name": request.auth.credentials.name,
 							"profile_pic": user.user_profile[0].profile_pic
@@ -56,6 +63,7 @@ module.exports = {
 								odgovor = Boom.badRequest('Došlo je do pogreške pri spremanju statusa!');
 								resolve();
 							} else {
+								console.log("sejvali smo");
 								odgovor = result;
 								resolve();
 							} 

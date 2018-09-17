@@ -14,7 +14,24 @@ module.exports = {
 				auth: "simple-cookie-strategy",
 				handler: async(request, h) => {
 					var odgovor;
-					await new Promise((resolve, reject) => User.find({"email": {$ne: request.auth.credentials.user}}, function(err, users){
+					var ids = [];
+					await new Promise((resolve, reject) => User.findOne({"member_id": request.auth.credentials.member_id}, function(err, user){
+						ids.push(user.member_id);
+						user.friends.forEach(function(friend){
+							ids.push(friend.member_id);
+						})
+						user.friend_requests.forEach(function(request){
+							ids.push(request.member_id);
+						})
+						user.sent_requests.forEach(function(request){
+							ids.push(request.member_id);
+						})
+						resolve();
+					}));
+					console.log("ids", ids);
+					await new Promise((resolve, reject) => User.find({"member_id": {$nin: ids}}, function(err, users){
+						
+						console.log("users:", users);
 						odgovor = h.view("partials/find_friends", {users: users});
 						resolve();
 					}));
@@ -31,6 +48,8 @@ module.exports = {
 					var odgovor = null;
 					await new Promise((resolve, reject) => User.find({"email": request.auth.credentials.user}, function(err, sending_user){
 						if(err) reject();
+						sending_user[0].update({$push: {"sent_requests": {"member_id": request.payload.friend_member_id}}}, function(err){
+						})
 						User.find({"member_id" : request.payload.friend_member_id}, function(err, added_user){
 							added_user[0].update({$push: {"friend_requests": {"member_id": sending_user[0].member_id, 
 							"friend_name": sending_user[0].name, "isRead" : false}}}, function(err){
@@ -40,7 +59,7 @@ module.exports = {
 
 							if(err)
 								odgovor = err;
-												resolve();
+							resolve();
 					}));
 					return odgovor;
 				}

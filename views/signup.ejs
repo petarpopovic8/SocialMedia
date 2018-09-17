@@ -117,15 +117,41 @@
 		var password = $('#password').val();
 		var avatar = $('#avatar').val();
 		var bio = $('#icon_prefix2').val();
-		var image_data;
-		var image_to_upload = $("#upload_profile_pic")[0].files[0];
-		var reader = new FileReader()
+		var image_data = null;
+		var image_type = null;
+		if($("#upload_profile_pic")[0].files[0] != null){
+			var image_to_upload = $("#upload_profile_pic")[0].files[0];
+			var reader = new FileReader()
 
-		reader.readAsDataURL(image_to_upload);
-		reader.onload = function(){
-			var image_data = reader.result.split(',')[1];
-			var image_type = image_to_upload.type.split("/")[1];
+			reader.readAsDataURL(image_to_upload);
+			reader.onload = function(){
+				var image_data = reader.result.split(',')[1];
+				var image_type = image_to_upload.type.split("/")[1];
 
+				$.ajax({
+					method: "POST",
+					url: "/sign_up",
+					data: {name: first_name + ' ' + last_name,
+					email: email, password: password,
+					image_data: JSON.stringify(image_data),
+					image_type: JSON.stringify(image_type),
+					bio: bio,
+					interests: JSON.stringify(M.Chips.getInstance($('.chips')).chipsData.map(x => x.tag))
+					},
+					success: function(data){
+						location.href = "http://localhost:3000/home";
+					},
+					error: function(response){
+						if(response.responseJSON.statusCode == 400)
+							M.toast({html: 'Email is already taken!'})
+						loader.style.display="none";	
+						registerinfo.style.display="block";
+					}
+
+				});
+			}
+		}
+		else{
 			$.ajax({
 				method: "POST",
 				url: "/sign_up",
@@ -137,15 +163,14 @@
 				interests: JSON.stringify(M.Chips.getInstance($('.chips')).chipsData.map(x => x.tag))
 				},
 				success: function(data){
-					location.href = "http://localhost:3000/home";
+					location.href ="http://localhost:3000/home";
 				},
 				error: function(response){
 					if(response.responseJSON.statusCode == 400)
-						M.toast({html: 'Email is already taken!'})
-					loader.style.display="none";	
+						M.toast({html: 'Email is already taken!!'})
+					loader.style.display ="none";
 					registerinfo.style.display="block";
 				}
-
 			});
 		}
 	}

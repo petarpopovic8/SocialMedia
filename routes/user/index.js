@@ -25,24 +25,39 @@ module.exports = {
 						"password": request.payload.password, "user_profile": {
 							"bio": request.payload.bio, "interests": request.payload.interests
 						}});
-						var user_profile_image = "user_" + user.member_id + "_" + shortid.generate() + "." + request.payload.image_type.replace(/['"]+/g, '');
-					 	fs.writeFile("user_profile_images/" + user_profile_image, new Buffer(request.payload.image_data, "base64"), function(err){
-
-						if(!err){
-						user.user_profile[0].profile_pic = user_profile_image;
-						request.cookieAuth.set({"user": user.email, "member_id": user.member_id, "name": user.name});
-						user.save(function(err, save_user_record){
-							if(err){
-							 	return Boom.badRequest('Ups! Nastao je error pri registraciji!');
-							 	resolve();
-							}
-							else{
-								odgovor = user_profile_image;
-								resolve();
-							}		
-						})
-				  	 
-						}});
+						if( request.payload.image_data == "" || request.payload.image_type == "" || request.payload.image_type =="null" || request.payload.image == null){
+							user.user_profile[0].profile_pic = "default_profile.png";
+							request.cookieAuth.set({"user": user.email, "member_id": user.member_id, "name": user.name});
+							user.save(function(err, save_user_record){
+								if(err){
+								 	return Boom.badRequest('Ups! Nastao je error pri registraciji!');
+								 	resolve();
+								}
+								else{
+									odgovor = "default_profile.png";
+									resolve();
+								}		
+							})
+						}
+						else{
+							var user_profile_image = "user_" + user.member_id + "_" + shortid.generate() + "." + request.payload.image_type.replace(/['"]+/g, '');
+						 	fs.writeFile("user_profile_images/" + user_profile_image, new Buffer(request.payload.image_data, "base64"), function(err){
+								if(!err){
+									user.user_profile[0].profile_pic = user_profile_image;
+									request.cookieAuth.set({"user": user.email, "member_id": user.member_id, "name": user.name});
+									user.save(function(err, save_user_record){
+										if(err){
+										 	return Boom.badRequest('Ups! Nastao je error pri registraciji!');
+										 	resolve();
+										}
+										else{
+											odgovor = user_profile_image;
+											resolve();
+										}		
+									})
+				  	 			}
+							})
+						};
 					}
 				}))		
 				return odgovor;				

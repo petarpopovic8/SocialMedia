@@ -69,22 +69,26 @@ module.exports = {
 					var user_profile_image = "user_" + request.auth.credentials.member_id + "_" + shortid.generate() + "." + request.payload.image_type;
 					await new Promise((resolve, reject) => fs.writeFile("user_profile_images/" + user_profile_image, new Buffer(request.payload.image_data, "base64"), function(err){
 						if(!err){
-							User.findOne({"email": request.auth.credentials.user}, function(err,user){
-								user.user_profile[0].profile_pic = user_profile_image;
-								user.save(function(err, result){
-									if(err){
-										odgovor = Boom.badRequest('Došlo je do pogreške pri spremanju korisnikovih promjena!');
-										resolve();
-									} else {
-										UserStatus.update({"user_email": request.auth.credentials.user}, {"profile_pic": user_profile_image}, {multi: true}, function(err, result){
-											odgovor = user_profile_image;
-											resolve();
-									  	})
-									  }
-								}); 
-							});
+							odgovor = null;
+							resolve();
 						}
 					}))
+					await new Promise((resolve, reject) => User.findOne({"email": request.auth.credentials.user}, function(err,user){
+						user.user_profile[0].profile_pic = user_profile_image;
+						console.log("nova profilna je", user.user_profile[0].profile_pic);
+						user.save(function(err, result){
+							if(err){
+								odgovor = Boom.badRequest('Došlo je do pogreške pri spremanju korisnikovih promjena!');
+								resolve();
+							} else {
+								UserStatus.update({"user_email": request.auth.credentials.user}, {$set: {"profile_pic": user_profile_image}}, {multi: true}, function(err, result){
+									console.log("osvježenje");
+									odgovor = user_profile_image;
+									resolve();
+							  	})
+							  }
+						}); 
+					}));
 					return odgovor;
 				}
 			}

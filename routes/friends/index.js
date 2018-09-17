@@ -91,6 +91,29 @@ module.exports = {
 			}
 		},
 		{
+		method: "POST",
+			path: "/decline_friend_request",
+			config: {
+				auth: "simple-cookie-strategy",
+				handler: async(request, h) => {
+					console.log(request.payload);
+					await new Promise((resolve, reject) => User.find({"email": request.auth.credentials.user}, function(err, user){
+						if(err) reject();
+						User.find({"member_id" : request.payload.member_id}, function(err, declined_user){
+
+							user[0].update({$pull: {"friend_requests": {"member_id": declined_user[0].member_id}}}, function(err){
+							});
+
+							declined_user[0].update({$pull: {"sent_requests": {"member_id": user[0].member_id}}}, function(err){
+							});
+						})
+						resolve();
+					}))
+					return null;
+				}		
+			}
+		},
+		{
 			method: "GET",
 			path: "/friends",
 			config: {

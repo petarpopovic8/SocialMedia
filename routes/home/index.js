@@ -25,8 +25,6 @@ module.exports = {
 						 isRead: x.isRead}));
 						user.friend_requests.forEach(x => x.isRead = true);
 						user.save(function(err, result){
-							console.log("sejvo");
-							
 						});
 						resolve();
 					}));
@@ -37,7 +35,7 @@ module.exports = {
 							});
 							resolve();
 					}))
-					return h.view('home', {name: request.auth.credentials.name, member_id: request.auth.credentials.member_id, user_statuses: user_statuses, friend_requests: friend_requests});
+					return h.view('home', {date_now: new Date(), name: request.auth.credentials.name, member_id: request.auth.credentials.member_id, user_statuses: user_statuses, friend_requests: friend_requests});
 				}
 			}
 			

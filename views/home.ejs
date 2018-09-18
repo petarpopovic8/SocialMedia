@@ -88,7 +88,7 @@
 							<%user_statuses.forEach(function(user_status) {%>
 							<div class="card horizontal">
 								<div class="card-image">	
-									<% if (!user_status.profile_pic) {%>
+									<% if (user_status.profile_pic == "default_profile.png") {%>
 									<i class="material-icons" style="margin: 30; color: #ee6e73; font-size: 7rem; display: block;">face</i>
 									<%} else {%>
 									<img src="http://localhost:3000/user_profile_images/<%=user_status.profile_pic%>">
@@ -96,19 +96,23 @@
 								</div>
 								<div class="card-stacked">
 									<div class="card-content">
-										<span class="card-title"><%=user_status.name%> @ 
-										<% if(user_status.status_date.getFullYear() === date_now.getFullYear() &&
-    									user_status.status_date.getMonth() === date_now.getMonth() &&
-    									user_status.status_date.getDate() === date_now.getDate()) {%>
-    									<% switch (date_now.getHours() - user_status.status_date.getHours()) {
-    									case 0: %> <%=date_now.getMinutes() - user_status.status_date.getMinutes()%> minutes ago<%
-    									break;
-    									case 1: %> 1 hour ago <%
-    									break;
-    									default: %> <%=date_now.getHours() - user_status.status_date.getHours()%> hours ago
-    									<%}}
-    									else{%>
-    									<%=user_status.status_date.toLocaleString()%> <%}%></span>
+										<span class="card-title">
+											<a href="/user_profile/<%=user_status.member_id%>" class="collection-item" 
+												style="color: #bb4455"><%=user_status.name%></a> @ 
+											<% if(user_status.status_date.getFullYear() === date_now.getFullYear() &&
+	    									user_status.status_date.getMonth() === date_now.getMonth() &&
+	    									user_status.status_date.getDate() === date_now.getDate()) {%>
+	    									<% switch (date_now.getHours() - user_status.status_date.getHours()) {
+	    									case 0: %> <%=date_now.getMinutes() - user_status.status_date.getMinutes()%> minutes ago<%
+	    									break;
+	    									case 1: %> 1 hour ago <%
+	    									break;
+	    									default: %> <%=date_now.getHours() - user_status.status_date.getHours()%> hours ago
+	    									<%}}
+	    									else{%>
+	    									<%=user_status.status_date.toLocaleString()%> <%}%>
+    										
+    									</span>
 										<%=user_status.user_status%>
 									</div>
 									<div class="card-action">
@@ -142,7 +146,7 @@
 						contentType: "application/json",
 						data: JSON.stringify({"user_status": status_val}),
 						success: function(saved_status){
-							var profile_pic = `<i class="material-icons" style="margin: 30; color: #ee6e73; font-size: 7rem; display: block;">face</i>`;
+							var profile_pic = `<img src="http://localhost:3000/user_profile_images/${saved_status.profile_pic}">`;
 							$("#user_statuses").prepend(`<div class="card horizontal"><div class="card-image">	
 								${profile_pic}
 								</div>

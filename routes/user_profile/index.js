@@ -81,7 +81,7 @@ module.exports = {
 								odgovor = Boom.badRequest('Došlo je do pogreške pri spremanju korisnikovih promjena!');
 								resolve();
 							} else {
-								UserStatus.update({"user_email": request.auth.credentials.user}, {$set: {"profile_pic": user_profile_image}}, {multi: true}, function(err, result){
+								UserStatus.update({"member_id": request.auth.credentials.member_id}, {$set: {"profile_pic": user_profile_image}}, {multi: true}, function(err, result){
 									console.log("osvježenje");
 									odgovor = user_profile_image;
 									resolve();
@@ -122,7 +122,7 @@ module.exports = {
 							User.findOne({"member_id": request.params.member_id}, function(err, visiting_user){
 								visiting_user.friends = visiting_user.user_profile[0].location =
 								visiting_user.user_profile[0].interests = null;
-								odgovor = h.view("user_profile_visit", {name: user.name, member_id: member_id, user: visiting_user, isFriend: isFriend});
+								odgovor = h.view("user_profile_visit", {name: user.name, member_id: user.member_id, user: visiting_user, isFriend: isFriend});
 								resolve();
 							})
 						}
